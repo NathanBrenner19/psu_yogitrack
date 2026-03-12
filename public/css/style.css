@@ -8,13 +8,53 @@ a { text-decoration: none; }
 
 /* ---------- Layout variations ---------- */
 .layout--center {
-  display: flex; justify-content: center; align-items: center; min-height: 100vh;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  width: 100%;
+  min-height: 100vh;
   padding: 2rem;
 }
 .layout--sidebar { 
   display: flex; 
   min-height: 100vh; 
 }
+
+.layout--sidebar main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.layout--center--top {
+  display: flex; 
+  justify-content: center; 
+  align-items: flex-start;  
+  width: 100%;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.table-layout {
+  display: flex;
+  /*flex-direction: column;*/
+  margin-bottom: 20px;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
+width: 100%;
+}
+
+.table-card {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-title {
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
 
 /* ---------- Card ---------- */
 .card {
@@ -60,6 +100,15 @@ legend { padding: 0 .25rem; }
 .btn--danger:hover { background: #992a20; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; margin-top: 1.5rem; }
+
+.table-btn-row {
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.table-card .package-table {
+  flex: 1;
+}
 
 /* ---------- Background image for dashboard ---------- */
 /* ---------- Full-page background with faint overlay ---------- */
@@ -166,4 +215,60 @@ select.form-input {
   background-repeat: no-repeat;
   background-position: right 0.7rem top 50%;
   background-size: 0.65rem auto;
+}
+
+/* ---------- Table ---------- */
+table{
+  border: 1px solid black;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+
+/* ---------- Packages tables: keep both same size ---------- */
+.package-table {
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;              
+  table-layout: fixed;       
+  background: #fff;
+  border-radius: 5px;
+}
+
+.package-table th,
+.package-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Make header fixed and body scroll so table height stays equal */
+.package-table thead,
+.package-table tbody,
+.package-table tr {
+  display: block;
+}
+
+.package-table thead tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.package-table tbody {
+  display: block;
+  width: 100%;
+  height: clamp(260px, 60vh, 620px);
+  overflow-y: auto;
+}
+
+.package-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }

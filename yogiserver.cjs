@@ -6,7 +6,7 @@ app.use(express.static("public"));
 app.use(express.json());
 
 app.use("/api/instructor", require("./routes/instructorRoutes.cjs"));
-
+app.use("/api/package", require("./routes/packagesRoutes.cjs"));
 
 
 // Start the web server
