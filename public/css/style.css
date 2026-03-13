@@ -37,17 +37,20 @@ a { text-decoration: none; }
 .table-layout {
   display: flex;
   /*flex-direction: column;*/
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   gap: 20px;
   justify-content: center;
   align-items: stretch;
-width: 100%;
+  width: 100%;
 }
 
 .table-card {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
+  /* Reserve space so action buttons don't change overall height */
+  position: relative;
+  padding-bottom: 3.25rem;
 }
 
 .table-title {
@@ -99,11 +102,15 @@ legend { padding: 0 .25rem; }
 .btn--danger { background: #c0392b; color: #fff; }
 .btn--danger:hover { background: #992a20; }
 
-.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; margin-top: 1.5rem; }
+.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: flex-end; margin-top: 0.75rem; }
 
 .table-btn-row {
   justify-content: flex-end;
-  margin-top: 0.75rem;
+  margin-top: 0.25rem;
+  /* Take the buttons out of normal flow so they don't affect table height */
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 .table-card .package-table {
@@ -221,7 +228,7 @@ select.form-input {
 table{
   border: 1px solid black;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 th, td {
@@ -263,7 +270,8 @@ th, td {
 .package-table tbody {
   display: block;
   width: 100%;
-  height: clamp(260px, 60vh, 620px);
+  /* Slightly shorter tables so they don't feel as tall */
+  height: clamp(180px, 40vh, 420px);
   overflow-y: auto;
 }
 

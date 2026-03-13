@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("packageForm");
   if (!form) return;
 
+
+  //Getting input form package form
   const typeRadios = Array.from(
     form.querySelectorAll('input[name="packageType"]')
   );
@@ -13,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("formError") ||
     form.querySelector(".form-error");
 
+  //show any errors
   function setError(message) {
     if (errorBox) {
       errorBox.textContent = message;
@@ -21,12 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  //clear any errors
   function clearError() {
     if (errorBox) {
       errorBox.textContent = "";
     }
   }
 
+  //Find the place holder from the radio button
   function updatePlaceholderId() {
     if (!packageIdInput) return;
 

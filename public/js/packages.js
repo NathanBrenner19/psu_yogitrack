@@ -6,18 +6,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const addBtn = document.getElementById('addBtn');
     if (addBtn) {
-        addBtn.addEventListener('click', openAddGeneralWin);
+        addBtn.addEventListener('click', (ev) => openAddPackageWin(ev, 'general'));
     }
 
-    const addSpecialBtn = document.getElementById('addSpecialBtn');
-    if (addSpecialBtn) {
-        addSpecialBtn.addEventListener('click', openAddGeneralWin);
+    const deleteBtn = document.getElementById('deleteBtn');
+    if (deleteBtn){
+        deleteBtn.addEventListener('click', (ev) => openDeletePackageWin(ev));
     }
 });
 
-//Opens a new window to add a new genal package
-function openAddGeneralWin(ev) {
-    let win = window.open('addPackage.html', null, 'popup,width=400,height=400,left=300,top=500');
+function openDeletePackageWin(ev){
+    let win = window.open('deletePackage.html', null, 'popup,width=600,height=300,left=600,top=500');
+}
+// Opens a new window to add a new package, with type hint
+function openAddPackageWin(ev, type) {
+    const url = type ? `addPackage.html?type=${encodeURIComponent(type)}` : 'addPackage.html';
+    let win = window.open(url, null, 'popup,width=600,height=600,left=600,top=500');
 }
 
 //Get general packages and add them to html table

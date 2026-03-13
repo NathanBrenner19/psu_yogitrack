@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YogiTrack Add Package</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <main class="layout--center">
+    <form class="card" id="packageDeleteForm" >
+      <h2>Select Package</h2>
+
+      <!-- Instructor Id-->
+      <label id = "PackageIdLabel" for="packageID">Package ID
+        <select name="packageId" id="packageIdSelect" class="form-input" required>
+          <option value=""> -- Select Package Id --</option>
+          <!-- Options will be populated by JavaScript-->
+        </select>
+      </label>
+
+      <button type="button" class="btn btn--danger" id="deleteBtn">Delete Package</button>
+    </form>
+  </main>
+
+  <script src="../js/deletePackage.js"></script>
+</body>
+</html>
