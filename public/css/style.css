@@ -48,9 +48,7 @@ a { text-decoration: none; }
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  /* Reserve space so action buttons don't change overall height */
   position: relative;
-  padding-bottom: 3.25rem;
 }
 
 .table-title {
@@ -99,6 +97,8 @@ legend { padding: 0 .25rem; }
 .btn:hover { background: #d5d5d5; }
 .btn--primary { background: #008080; color: #fff; }
 .btn--primary:hover { background: #006c6c; }
+.btn--edit { background: #eda909; color: #fff; }
+.btn--edit:hover { background: #c9900a; }
 .btn--danger { background: #c0392b; color: #fff; }
 .btn--danger:hover { background: #992a20; }
 
@@ -106,15 +106,12 @@ legend { padding: 0 .25rem; }
 
 .table-btn-row {
   justify-content: flex-end;
-  margin-top: 0.25rem;
-  /* Take the buttons out of normal flow so they don't affect table height */
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  margin-top: 0.75rem;
 }
 
 .table-card .package-table {
-  flex: 1;
+  /* Don't let the table "compete" with the action buttons for height */
+  flex: 0 0 auto;
 }
 
 /* ---------- Background image for dashboard ---------- */
@@ -279,4 +276,12 @@ th, td {
   display: table;
   width: 100%;
   table-layout: fixed;
+}
+
+/* Keep package actions clear of tables on smaller screens */
+@media (max-width: 1200px) {
+  .table-btn-row {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }

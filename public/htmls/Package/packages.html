@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>YogiTrack Packages</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body class="layout--sidebar">
   <!-- Re-use the same sidebar -->
   <aside class="sidebar">
     <a class="logo-wrap" href="dashboard.html">
-      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
+      <img src="../../images/Logo.png" alt="YogaTrack Logo" class="logo">
     </a>
   <nav class="nav">
-    <a href="instructor.html">Instructors</a>
+    <a href="../instructor.html">Instructors</a>
     <a href="packages.html">Packages</a>
     <a href="#">Class Schedule</a>
     <a href="#">Customers</a>
@@ -45,7 +45,7 @@
 
         <!-- Special packages table-->
         <section class="table-card">
-          <h1 class="table-title">Special Packages</h1>
+          <h1 class="table-title">Senior Packages</h1>
           <table class="package-table" id="specialPackageTable">
             <thead>
               <tr>
@@ -61,12 +61,13 @@
           </table>
           <div class="btn-row table-btn-row">
             <button type="button" class="btn btn--primary" id="addBtn">New&nbsp;Package</button>
+            <button type="button" class="btn btn--edit" id="editBtn">Edit&nbsp;Package</button>
             <button type="button" class="btn btn--danger" id="deleteBtn">Delete&nbsp;Package</button>
           </div>
         </section>
       </div>
     </section>
   </main>
-  <script src="../js/packages.js"></script>
+  <script src="/js/Package/packages.js"></script>
 </body>
 </html>

@@ -13,15 +13,31 @@ document.addEventListener("DOMContentLoaded", () => {
     if (deleteBtn){
         deleteBtn.addEventListener('click', (ev) => openDeletePackageWin(ev));
     }
+
+    const editBtn = document.getElementById('editBtn');
+    if (editBtn){
+        editBtn.addEventListener('click', (ev) => openEditPackageWin(ev));
+    }
 });
 
-function openDeletePackageWin(ev){
-    let win = window.open('deletePackage.html', null, 'popup,width=600,height=300,left=600,top=500');
+function openEditPackageWin(ev){
+    let win = window.open('editPackage.html', null, 'popup,width=600,height=600,left=600,top=200');
 }
-// Opens a new window to add a new package, with type hint
+
+function openDeletePackageWin(ev){
+    let win = window.open('deletePackage.html', null, 'popup,width=600,height=300,left=600,top=300');
+}
+// Opens a new window to add a new package
 function openAddPackageWin(ev, type) {
     const url = type ? `addPackage.html?type=${encodeURIComponent(type)}` : 'addPackage.html';
-    let win = window.open(url, null, 'popup,width=600,height=600,left=600,top=500');
+    let win = window.open(url, null, 'popup,width=600,height=600,left=600,top=200');
+}
+
+//Sorting the packages by package ID numbers
+function sortPackagesById(packages) {
+    return packages.sort((a, b) =>
+        String(a.packageId).localeCompare(String(b.packageId), undefined, { numeric: true, sensitivity: "base" })
+    );
 }
 
 //Get general packages and add them to html table
@@ -37,7 +53,9 @@ async function addGeneralPackageTableListener() {
         const generalPackageData = await response.json();
 
         //Clear existing rows in package table
-        generalPackageData.innerHTML = "";
+        generalPackageTableBody.innerHTML = "";
+
+        sortPackagesById(generalPackageData);
 
         //Populate the table with package data
         generalPackageData.forEach(pkg => {
@@ -71,7 +89,9 @@ async function addSpecialPackageTableListener() {
         const specialPackageData = await response.json();
 
         //Clear existing rows in package table
-        specialPackageData.innerHTML = "";
+        specialPackageTableBody.innerHTML = "";
+
+        sortPackagesById(specialPackageData);
 
         //Populate the table with package data
         specialPackageData.forEach(pkg => {

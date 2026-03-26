@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YogiTrack Add Package</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <main class="layout--center">
+        <form class="card" id="packageForm" >
+            <h2>Package Details</h2>
+            <h3>Select Package</h3>
+
+            <!-- Package Id-->
+            <label id = "PackageIdLabel" for="packageID">Package ID
+                <select name="packageId" id="packageIdSelect" class="form-input" required>
+                <option value=""> -- Select Package Id --</option>
+                <!-- Options will be populated by JavaScript-->
+                </select>
+            </label>
+
+            <div class="grid-2">
+            <label>Package&nbsp;Name
+                <input type="text" name="packageName" id="packageName">
+            </label>
+            </div>
+
+            <label>Description
+            <textarea name="description" rows="2"></textarea>
+            </label>
+    
+            <div class="grid-2">
+            <label>Price
+                <input type="number" name="price" id="price" step="0.01" min="0">
+            </label>
+            </div>
+
+            <button type="submit" class="btn btn--primary">Save Package</button>
+        </form>
+  </main>
+  <script src="/js/Package/editPackage.js"></script>
+</body>
+</html>

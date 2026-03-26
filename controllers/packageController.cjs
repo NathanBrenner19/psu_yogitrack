@@ -19,6 +19,58 @@ const getNextPackageIdForPrefix = async (prefix) => {
     return `${prefix}${String(nextNumber).padStart(3, "0")}`;
 };
 
+//Gets package info
+exports.getPackage = async (req, res) => {
+    try{
+        const packageId = req.query.packageId;
+        const packageDetail = await Package.findOne({packageId: packageId});
+
+        res.json(packageDetail);
+    }
+    catch (e){
+        res.status(400).json({ error: e.message });
+    }
+};
+
+//Add edited package data into DB
+exports.add = async (req, res) => {
+    try{
+        const {
+            packageId,
+            packageName,
+            description,
+            price
+        } = req.body;
+
+        if (!packageId){
+            return res.status(400).json({ message: "Missing required fields"});
+        }
+
+        //Finds the package from Id dropdown and updates it with the data from the edit form
+        const updatedPackage = await Package.findOneAndUpdate(
+            { packageId },
+            {
+                ...(typeof packageName !== "undefined" ? { packageName } : {}),
+                ...(typeof description !== "undefined" ? { description } : {}),
+                ...(typeof price !== "undefined" ? { price } : {})
+            },
+            { returnDocument: "after", runValidators: true }
+        );
+
+        if (!updatedPackage) {
+            return res.status(404).json({ message: "Package not found" });
+        }
+
+        return res.status(200).json({
+            message: "Package updated successfully",
+            package: updatedPackage
+        });
+    }
+    catch(e){
+        return res.status(400).json({ message: e.message });
+    }
+};
+
 //Gets all general packages
 exports.getGeneralPackages = async (req, res) => {
     try{
