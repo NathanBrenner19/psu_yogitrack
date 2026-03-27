@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YogiTrack - Customer Details</title>
+  <link rel="stylesheet" href="customer.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo-section">
+        <h1 class="logo-text">YogiTrack</h1>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#">Instructors</a>
+        <a href="#">Packages</a>
+        <a href="#">Class Schedule</a>
+        <a href="#" class="active">Customers</a>
+        <a href="#">Check-ins</a>
+        <a href="#" id="logoutBtn">Log Out</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="card">
+        <h2>Customer Details</h2>
+
+        <form id="customerForm">
+          <!-- Search mode -->
+          <label id="customerIdLabel">Customer ID
+            <select name="customerId" id="customerIdSelect" class="form-input">
+              <option value="">-- Select Customer ID --</option>
+            </select>
+          </label>
+
+          <!-- Add mode -->
+          <label id="customerIdTextLabel" style="display:none;">Customer ID</label>
+          <input id="customerIdText" name="customerIdText" type="text" readonly style="display:none;" />
+
+          <div class="grid-2">
+            <label>First Name
+              <input type="text" name="firstname" />
+            </label>
+
+            <label>Last Name
+              <input type="text" name="lastname" />
+            </label>
+          </div>
+
+          <label>Address
+            <textarea name="address" rows="3"></textarea>
+          </label>
+
+          <div class="grid-2">
+            <label>Phone
+              <input type="text" name="phone" />
+            </label>
+
+            <label>Email
+              <input type="email" name="email" />
+            </label>
+          </div>
+
+          <fieldset>
+            <legend>Preferred Contact</legend>
+            <div class="radio-group">
+              <label><input type="radio" name="pref" value="phone" /> Phone</label>
+              <label><input type="radio" name="pref" value="email" /> Email</label>
+            </div>
+          </fieldset>
+
+          <label>Class Balance
+            <input type="number" name="classBalance" value="0" readonly />
+          </label>
+
+          <div class="button-row">
+            <button type="button" id="searchBtn">Search</button>
+            <button type="button" id="addBtn" class="primary">Add New</button>
+            <button type="button" id="saveBtn">Save</button>
+            <button type="button" id="deleteBtn" class="danger">Delete</button>
+            <button type="button" id="clearBtn">Clear</button>
+            <button type="button" id="exitBtn">Exit</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="customer.js"></script>
+</body>
+</html>
