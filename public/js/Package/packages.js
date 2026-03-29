@@ -6,18 +6,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const addBtn = document.getElementById('addBtn');
     if (addBtn) {
-        addBtn.addEventListener('click', openAddGeneralWin);
+        addBtn.addEventListener('click', (ev) => openAddPackageWin(ev, 'general'));
     }
 
-    const addSpecialBtn = document.getElementById('addSpecialBtn');
-    if (addSpecialBtn) {
-        addSpecialBtn.addEventListener('click', openAddGeneralWin);
+    const deleteBtn = document.getElementById('deleteBtn');
+    if (deleteBtn){
+        deleteBtn.addEventListener('click', (ev) => openDeletePackageWin(ev));
+    }
+
+    const editBtn = document.getElementById('editBtn');
+    if (editBtn){
+        editBtn.addEventListener('click', (ev) => openEditPackageWin(ev));
     }
 });
 
-//Opens a new window to add a new genal package
-function openAddGeneralWin(ev) {
-    let win = window.open('addPackage.html', null, 'popup,width=400,height=400,left=300,top=500');
+function openEditPackageWin(ev){
+    let win = window.open('editPackage.html', null, 'popup,width=600,height=600,left=600,top=200');
+}
+
+function openDeletePackageWin(ev){
+    let win = window.open('deletePackage.html', null, 'popup,width=600,height=300,left=600,top=300');
+}
+// Opens a new window to add a new package
+function openAddPackageWin(ev, type) {
+    const url = type ? `addPackage.html?type=${encodeURIComponent(type)}` : 'addPackage.html';
+    let win = window.open(url, null, 'popup,width=600,height=600,left=600,top=200');
+}
+
+//Sorting the packages by package ID numbers
+function sortPackagesById(packages) {
+    return packages.sort((a, b) =>
+        String(a.packageId).localeCompare(String(b.packageId), undefined, { numeric: true, sensitivity: "base" })
+    );
 }
 
 //Get general packages and add them to html table
@@ -33,7 +53,9 @@ async function addGeneralPackageTableListener() {
         const generalPackageData = await response.json();
 
         //Clear existing rows in package table
-        generalPackageData.innerHTML = "";
+        generalPackageTableBody.innerHTML = "";
+
+        sortPackagesById(generalPackageData);
 
         //Populate the table with package data
         generalPackageData.forEach(pkg => {
@@ -67,7 +89,9 @@ async function addSpecialPackageTableListener() {
         const specialPackageData = await response.json();
 
         //Clear existing rows in package table
-        specialPackageData.innerHTML = "";
+        specialPackageTableBody.innerHTML = "";
+
+        sortPackagesById(specialPackageData);
 
         //Populate the table with package data
         specialPackageData.forEach(pkg => {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>YogiTrack Add Package</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
     <main class="layout--center">
@@ -12,13 +12,15 @@
           <fieldset>
             <legend>Package Type</legend>
             <div class="radio-row">
-              <label><input type="radio" name="pref" value="general">General</label>
-              <label><input type="radio" name="pref" value="special">Special</label>
+              <label><input type="radio" name="packageType" value="general">General</label>
+              <label><input type="radio" name="packageType" value="special">Senior</label>
             </div>
           </fieldset>
+
           <div class="grid-2">
             <label>Package&nbsp;Name
-              <input type="text" name="packageName">
+              <input type="text" name="packageName" id="packageName">
+            </label>
           </div>
 
           <label>Description
@@ -27,7 +29,13 @@
     
           <div class="grid-2">
             <label>Price
-              <input type="number" name="price">
+              <input type="number" name="price" id="price" step="0.01" min="0">
             </label>
           </div>
+
+          <button type="submit" class="btn btn-primary">Save Package</button>
+        </form>
+    </main>
+
+    <script src="/js/Package/addPackage.js"></script>
 </body>

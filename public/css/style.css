@@ -37,17 +37,18 @@ a { text-decoration: none; }
 .table-layout {
   display: flex;
   /*flex-direction: column;*/
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   gap: 20px;
   justify-content: center;
   align-items: stretch;
-width: 100%;
+  width: 100%;
 }
 
 .table-card {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .table-title {
@@ -96,10 +97,22 @@ legend { padding: 0 .25rem; }
 .btn:hover { background: #d5d5d5; }
 .btn--primary { background: #008080; color: #fff; }
 .btn--primary:hover { background: #006c6c; }
+.btn--edit { background: #eda909; color: #fff; }
+.btn--edit:hover { background: #c9900a; }
 .btn--danger { background: #c0392b; color: #fff; }
 .btn--danger:hover { background: #992a20; }
 
-.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; margin-top: 1.5rem; }
+.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: flex-end; margin-top: 0.75rem; }
+
+.table-btn-row {
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.table-card .package-table {
+  /* Don't let the table "compete" with the action buttons for height */
+  flex: 0 0 auto;
+}
 
 .table-btn-row {
   justify-content: flex-end;
@@ -263,7 +276,8 @@ th, td {
 .package-table tbody {
   display: block;
   width: 100%;
-  height: clamp(260px, 60vh, 620px);
+  /* Slightly shorter tables so they don't feel as tall */
+  height: clamp(180px, 40vh, 420px);
   overflow-y: auto;
 }
 
@@ -271,4 +285,12 @@ th, td {
   display: table;
   width: 100%;
   table-layout: fixed;
+}
+
+/* Keep package actions clear of tables on smaller screens */
+@media (max-width: 1200px) {
+  .table-btn-row {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }
