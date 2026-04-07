@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YogiTrack Packages</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="layout--sidebar">
+  <!-- Re-use the same sidebar -->
+  <aside class="sidebar">
+    <a class="logo-wrap" href="dashboard.html">
+      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
+    </a>
+  <nav class="nav">
+    <a href="instructor.html">Instructors</a>
+    <a href="packages.html">Packages</a>
+    <a href="class.html">Class Schedule</a>
+    <a href="customer.html">Customers</a>
+    <a href="#">Check-ins</a>
+    <a href="../index.html">Log Out</a>
+  </nav>
+  </aside>
+
+  <!-- Package tables -->
+  <main>
+    <section class="layout--center--top packages-page">
+      <div class="packages-page-content">
+      <div class="table-layout">
+        <!-- General packages table-->
+        <section class="table-card">
+          <h1 class="table-title">General Packages</h1>
+          <table class="package-table" id="generalPackageTable">
+            <thead>
+              <tr>
+                <th>Package ID</th>
+                <th>Package Name</th>
+                <th>Description</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody id="generalPackageTableBody">
+              <!-- Rows will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Special packages table-->
+        <section class="table-card">
+          <h1 class="table-title">Senior Packages</h1>
+          <table class="package-table" id="specialPackageTable">
+            <thead>
+              <tr>
+                <th>Package ID</th>
+                <th>Package Name</th>
+                <th>Description</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody id="specialPackageTableBody">
+              <!-- Rows will be populated by JavaScript -->
+            </tbody>
+          </table>
+      </div>
+
+      <div class="package-forms-stack">
+        <section id="section-add" class="package-form-section" aria-labelledby="section-add-heading">
+          <form class="card card--wide" id="addPackageForm">
+            <h2 id="section-add-heading">Package Details</h2>
+
+            <!-- Package Id -->
+            <label id="classIdLabel">Package ID
+              <select name="packageId" id="packageIdSelect" class="form-input">
+                <option value="">-- Select Package ID --</option>
+              <!-- Options will be populated by JavaScript-->
+              </select>
+            </label>
+
+       
+       <label>
+          <!-- Toggle with ClassIdLabel -->
+          <label id="packageIdTextLabel" style="display: none;">Package ID</label>
+          <input id="packageIdText" type="text" style="display: none;" readonly/>
+      </label>
+
+            <fieldset>
+              <legend>Package Type</legend>
+              <div class="radio-row">
+                <label><input type="radio" name="packageType" value="general"> General</label>
+                <label><input type="radio" name="packageType" value="special"> Senior</label>
+              </div>
+            </fieldset>
+
+            <div>
+              <label for="addPackageName">Package&nbsp;Name
+                <input type="text" name="packageName" id="addPackageName" autocomplete="off">
+              </label>
+            </div>
+
+            <label for="addPackageDescription">Description
+              <textarea name="description" id="addPackageDescription" rows="2"></textarea>
+            </label>
+
+            <div class="grid-2">
+              <label for="addPackagePrice">Price
+                <input type="number" name="price" id="addPackagePrice" step="0.01" min="0">
+              </label>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" class="btn btn--primary">Save Package</button>
+              <button type="button" class="btn btn--danger" id="deleteBtn">Delete Package</button>
+              </div>
+          </form>
+        </section>
+
+      </div>
+      </div>
+    </section>
+  </main>
+  <script src="/js/packages.js"></script>
+</body>
+</html>

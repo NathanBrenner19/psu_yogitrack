@@ -5,9 +5,6 @@ const customerController = require("../controllers/customerController.cjs");
 // GET one customer
 router.get("/getCustomer", customerController.getCustomer);
 
-// GET next customer ID
-router.get("/getNextId", customerController.getNextId);
-
 // ADD customer
 router.post("/add", customerController.add);
 

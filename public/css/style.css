@@ -34,6 +34,12 @@ a { text-decoration: none; }
   padding: 2rem;
 }
 
+/* Packages page embeds forms below tables; allow vertical growth and scroll. */
+.layout--center--top.packages-page {
+  height: auto;
+  min-height: 100vh;
+}
+
 .table-layout {
   display: flex;
   /*flex-direction: column;*/
@@ -109,18 +115,41 @@ legend { padding: 0 .25rem; }
   margin-top: 0.75rem;
 }
 
+.packages-page-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: stretch;
+}
+
+.package-forms-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.package-form-section {
+  scroll-margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.package-form-subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+}
+
+/* Same table height in both columns: don't flex-grow to fill the card (first column
+   would become taller than the second, which shares space with the action buttons). */
 .table-card .package-table {
-  /* Don't let the table "compete" with the action buttons for height */
   flex: 0 0 auto;
-}
-
-.table-btn-row {
-  justify-content: flex-end;
-  margin-top: 0.75rem;
-}
-
-.table-card .package-table {
-  flex: 1;
+  align-self: stretch;
+  width: 100%;
 }
 
 /* ---------- Background image for dashboard ---------- */
@@ -245,10 +274,9 @@ th, td {
 
 /* ---------- Packages tables: keep both same size ---------- */
 .package-table {
-  flex: 1 1 0;
   width: 100%;
-  min-width: 0;              
-  table-layout: fixed;       
+  min-width: 0;
+  table-layout: fixed;
   background: #fff;
   border-radius: 5px;
 }

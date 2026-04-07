@@ -126,7 +126,7 @@ async function addInstructorDropdownListener() {
         form.pref[0].checked = true;
       } else form.pref[1].checked = true;
     } catch (err) {
-      alert(`Error searching package: ${instructorId} - ${err.message}`);
+      alert(`Error searching instructor: ${instructorId} - ${err.message}`);
     }
   });
 }

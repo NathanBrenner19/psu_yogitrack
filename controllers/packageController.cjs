@@ -1,5 +1,6 @@
 const Package = require("../models/packageModel.cjs");
 
+
 //Finds the next valid package Id 
 const getNextPackageIdForPrefix = async (prefix) => {
     //Find the next package Id filter from the prefix passed
@@ -17,6 +18,8 @@ const getNextPackageIdForPrefix = async (prefix) => {
 
     return `${prefix}${String(nextNumber).padStart(3, "0")}`;
 };
+
+
 
 //Gets package info
 exports.getPackage = async (req, res) => {
@@ -91,7 +94,7 @@ exports.getSpecialPackages = async (req, res) => {
 };
 
 //Gets all package ID's for drop down menu
-exports.getPackagesId = async (req, res) => {
+exports.getPackageIds = async (req, res) => {
     try {
         const packages = await Package.find({});
         res.json(packages);
@@ -117,6 +120,7 @@ exports.deletePackage = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
 
 //Creates a new package with a new valid ID and prefix
 exports.createPackage = async (req, res) => {

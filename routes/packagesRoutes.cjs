@@ -7,7 +7,7 @@ router.post("/add", packageController.add);
 router.get("/getGeneralPackages", packageController.getGeneralPackages);
 router.get("/getSpecialPackages", packageController.getSpecialPackages);
 router.post("/createPackage", packageController.createPackage);
-router.get("/getPackageIds", packageController.getPackagesId);
+router.get("/getPackageIds", packageController.getPackageIds);
 router.delete("/deletePackage", packageController.deletePackage);
 
 module.exports = router;

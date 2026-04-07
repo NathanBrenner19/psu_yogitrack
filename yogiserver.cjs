@@ -7,6 +7,8 @@ app.use(express.json());
 
 app.use("/api/instructor", require("./routes/instructorRoutes.cjs"));
 app.use("/api/package", require("./routes/packagesRoutes.cjs"));
+app.use("/api/customer", require("./routes/customerRoutes.cjs"));
+app.use("/api/class", require("./routes/classRoutes.cjs"));
 
 
 // Start the web server
