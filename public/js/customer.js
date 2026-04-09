@@ -3,6 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   addCustomerDropdownListener();
 });
 
+//Checks user role for user management tab
+const role = localStorage.getItem("role");
+    const userManagementLink = document.getElementById("userManagementLink");
+
+    if (role === "admin" && userManagementLink) {
+      userManagementLink.style.display = "block";
+    }
 
 // SAVE
 document.getElementById("addBtn").addEventListener("click", async () => {

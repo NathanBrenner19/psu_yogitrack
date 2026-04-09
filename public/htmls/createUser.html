@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create User</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .form-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .form-card h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #05713d;
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+    <div class="overlay" style="justify-content: center; align-items: center; width: 100%;">
+      <div class="page-wrap">
+        <div class="form-card">
+          <h2>Create New User</h2>
+
+          <input type="text" id="firstName" />
+          <label for="firstName">First Name</label>
+          
+
+          <input type="text" id="lastName" />
+          <label for="lastName">Last Name</label>
+          
+
+          <input type="text" id="username" />
+          <label for="username">Username</label>
+          
+
+          <input type="email" id="email" />
+          <label for="email">Email</label>
+         
+
+          <input type="password" id="password" />
+          <label for="password">Password</label>
+          
+
+          
+          <select id="role" class="styled-select">
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+            <option value="instructor">Instructor</option>
+          </select>
+          <label for="role">Role</label>
+
+          <div class="btn-row">
+            <button class="btn btn--primary" onclick="createUser()">Create User</button>
+            <button class="btn" onclick="goBack()">Back</button>
+          </div>
+
+          <div class="message" id="message"></div>
+        </div>
+      </div>
+    </div>
+
+  <script>
+    const role = localStorage.getItem("role");
+
+    if (role !== "admin") {
+      window.location.href = "../login.html";
+    }
+
+    async function createUser() {
+      const message = document.getElementById("message");
+
+      const body = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+        role: document.getElementById("role").value
+      };
+
+      const currentRole = localStorage.getItem("role");
+
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": currentRole || ""
+          },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          message.style.color = "red";
+          message.textContent = data.message || "User creation failed";
+          return;
+        }
+
+        message.style.color = "#05713d";
+        message.textContent = "User created successfully";
+      } catch (err) {
+        message.style.color = "red";
+        message.textContent = "Error connecting to server";
+      }
+    }
+
+    function goBack() {
+      window.location.href = "manageUsers.html";
+    }
+  </script>
+</body>
+</html>

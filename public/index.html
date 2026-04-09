@@ -11,6 +11,14 @@
     <h1>Welcome to YogiTrack</h1>
     <p>Your all-in-one studio management companion.</p>
     <a class="btn btn--primary" href="htmls/dashboard.html">Log&nbsp;in</a>
+    
   </main>
+<script>
+  const user = localStorage.getItem("username");
+
+  if (!user) {
+    window.location.href = "/login.html";
+  }
+</script>
 </body>
 </html>

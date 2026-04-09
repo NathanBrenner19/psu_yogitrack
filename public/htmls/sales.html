@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YogiTrack - Sales</title>
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    .sales-panel {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 1rem;
+      width: 100%;
+      max-width: 760px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .sales-panel h2 {
+      text-align: center;
+      color: #05713d;
+      margin-bottom: 1.5rem;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .readonly-box {
+      background: #f3f3f3;
+    }
+  </style>
+</head>
+<body class="layout--sidebar">
+  <!-- Re-use the same sidebar -->
+  <aside class="sidebar">
+    <a class="logo-wrap" href="dashboard.html">
+      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
+    </a>
+    <nav class="nav">
+        <a href="instructor.html">Instructors</a>
+        <a href="packages.html">Packages</a>
+        <a href="class.html">Class Schedule</a>
+        <a href="customer.html">Customers</a>
+        <a href="sales.html">Sales</a>
+        <a href="#">Check-ins</a>
+        <a href="manageUsers.html" id="userManagementLink" style="display: none;">User Management</a>
+        <a href="../login.html">Log Out</a>
+    </nav>
+  </aside>
+
+        <main class="main-bg">
+          <div class="overlay" style="justify-content: center; align-items: center; width: 100%;">
+          <div class="sales-panel">
+            <h2>Record Sale</h2>
+
+            <label>
+              Existing Sale ID
+              <select id="saleIdSelect" class="styled-select">
+                <option value="">-- Select Sale ID --</option>
+              </select>
+            </label>
+
+            <form id="salesForm">
+              <div class="grid-2">
+                <label>
+                  Sale ID
+                  <input type="text" id="saleId" class="readonly-box" readonly />
+                </label>
+
+                <label>
+                  Payment Method
+                  <select id="paymentMethod" class="styled-select">
+                    <option value="cash">Cash</option>
+                    <option value="card">Card</option>
+                    <option value="zelle">Zelle</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid-2">
+                <label>
+                  Customer
+                  <select id="customerId" class="styled-select">
+                    <option value="">-- Select Customer --</option>
+                  </select>
+                </label>
+
+                <label>
+                  Package
+                  <select id="packageId" class="styled-select" >
+                    <option value="" >-- Select Package --</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="grid-2">
+                <label>
+                  Package Name
+                  <input type="text" id="packageName" class="readonly-box" readonly />
+                </label>
+
+                <label>
+                  Amount Paid
+                  <input type="number" id="amountPaid" step="0.01" min="0" />
+                </label>
+              </div>
+
+              <div class="grid-2">
+                <label>
+                  Validity Start Date
+                  <input type="date" id="validityStartDate" />
+                </label>
+
+                <label>
+                  Validity End Date
+                  <input type="date" id="validityEndDate" />
+                </label>
+              </div>
+
+              <div class="grid-2">
+                <label>
+                    Classes Added
+                    <input type="number" id="classesAdded" class="readonly-box" readonly />
+                </label>
+                </div>
+
+              <div class="action-row">
+                <button type="button" class="btn btn--primary" onclick="saveSale()">Save</button>
+                <button type="button" class="btn btn--danger" onclick="deleteSale()">Delete</button>
+                <button type="button" class="btn" onclick="clearForm()">Clear</button>
+                
+              </div>
+
+              <div class="message" id="message"></div>
+            </form>
+          </div>
+          </div>
+        </main>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let packagesCache = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSelectedSale();
+    });
+
+    function getClassesFromPackageName(name) {
+      const lower = (name || "").toLowerCase();
+      if (lower.includes("single")) return 1;
+      if (lower.includes("4 class")) return 4;
+      if (lower.includes("10 class")) return 10;
+      if (lower.includes("unlimited")) return 9999;
+      return 0;
+    }
+
+    async function loadCustomers() {
+      const select = document.getElementById("customerId");
+      try {
+        const res = await fetch("/api/customer/getCustomerIds");
+        const customers = await res.json();
+
+        select.innerHTML = `<option value="">-- Select Customer --</option>`;
+        customers.forEach(customer => {
+          const option = document.createElement("option");
+          option.value = customer.customerId;
+          option.textContent = `${customer.customerId} - ${customer.firstName} ${customer.lastName}`;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        showMessage("Error loading customers", "red");
+      }
+    }
+
+    async function loadPackages() {
+      const select = document.getElementById("packageId");
+      try {
+        const res = await fetch("/api/package/getPackageIds");
+        const packages = await res.json();
+
+        packagesCache = packages;
+        select.innerHTML = `<option value="">-- Select Package --</option>`;
+
+        packages.forEach(pkg => {
+          const option = document.createElement("option");
+          option.value = pkg.packageId;
+          option.textContent = `${pkg.packageId} - ${pkg.packageName}`;
+          option.dataset.name = pkg.packageName;
+          option.dataset.price = pkg.price;
+          option.dataset.type = pkg.packageType;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        showMessage("Error loading packages", "red");
+      }
+    }
+
+    async function loadSales() {
+      const select = document.getElementById("saleIdSelect");
+      try {
+        const res = await fetch("/api/sale/list");
+        const sales = await res.json();
+
+        select.innerHTML = `<option value="">-- Select Sale ID --</option>`;
+        sales.forEach(sale => {
+          const option = document.createElement("option");
+          option.value = sale.saleId;
+          option.textContent = `${sale.saleId} - ${sale.customerId} - ${sale.packageName}`;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        showMessage("Error loading sales", "red");
+      }
+    }
+
+    async function loadSelectedSale() {
+      const select = document.getElementById("saleIdSelect");
+      
+      
+      select.addEventListener( "change", async () => {
+        const saleId = document.getElementById("saleIdSelect").value;
+
+        if (!saleId) {
+        showMessage("Please select a sale", "red");
+        return;
+        }
+
+        try {
+          const res = await fetch(`/api/sale/${saleId}`);
+          const sale = await res.json();
+
+          if (!res.ok) {
+            showMessage(sale.message || "Sale not found", "red");
+            return;
+          }
+
+          isAddMode = false;
+          fillForm(sale);
+          showMessage("Sale loaded", "#05713d");
+        } catch (err) {
+          showMessage("Error loading sale", "red");
+        }
+      });
+    }
+
+    function fillForm(sale) {
+      document.getElementById("saleId").value = sale.saleId || "";
+      document.getElementById("customerId").value = sale.customerId || "";
+      document.getElementById("packageId").value = sale.packageId || "";
+      document.getElementById("packageName").value = sale.packageName || "";
+      
+      document.getElementById("amountPaid").value = sale.amountPaid ?? "";
+      document.getElementById("paymentMethod").value = sale.paymentMethod || "cash";
+      document.getElementById("validityStartDate").value = sale.validityStartDate ? sale.validityStartDate.slice(0, 10) : "";
+      document.getElementById("validityEndDate").value = sale.validityEndDate ? sale.validityEndDate.slice(0, 10) : "";
+      document.getElementById("classesAdded").value = sale.classesAdded ?? 0;
+    }
+
+    function handlePackageChange() {
+      const select = document.getElementById("packageId");
+      const selectedOption = select.options[select.selectedIndex];
+
+      if (!selectedOption || !selectedOption.value) {
+        document.getElementById("packageName").value = "";
+        document.getElementById("packageType").value = "";
+        document.getElementById("amountPaid").value = "";
+        document.getElementById("classesAdded").value = 0;
+        return;
+      }
+
+      const pkgName = selectedOption.dataset.name || "";
+      const pkgPrice = selectedOption.dataset.price || "";
+      
+
+      document.getElementById("packageName").value = pkgName;
+      
+      document.getElementById("amountPaid").value = pkgPrice;
+      document.getElementById("classesAdded").value = getClassesFromPackageName(pkgName);
+    }
+
+    async function saveSale() {
+      const saleId = document.getElementById("saleId").value.trim();
+
+      const body = {
+        customerId: document.getElementById("customerId").value,
+        packageId: document.getElementById("packageId").value,
+        amountPaid: Number(document.getElementById("amountPaid").value),
+        paymentMethod: document.getElementById("paymentMethod").value,
+        validityStartDate: document.getElementById("validityStartDate").value,
+        validityEndDate: document.getElementById("validityEndDate").value
+      };
+
+      if (!body.customerId || !body.packageId || !body.validityStartDate || !body.validityEndDate) {
+        showMessage("Customer, package, and validity dates are required", "red");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/sale/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showMessage(data.message || "Failed to record sale", "red");
+          return;
+        }
+
+        fillForm(data.sale);
+        isAddMode = false;
+        await loadSales();
+        document.getElementById("saleIdSelect").value = data.sale.saleId;
+        showMessage(`Sale recorded successfully. New balance: ${data.updatedCustomerBalance}`, "#05713d");
+      } catch (err) {
+        showMessage("Error saving sale", "red");
+      }
+    }
+
+    async function deleteSale() {
+      const saleId = document.getElementById("saleId").value.trim();
+
+      if (!saleId) {
+        showMessage("Load a sale before deleting", "red");
+        return;
+      }
+
+      if (!confirm(`Are you sure you want to delete ${saleId}?`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/sale/${saleId}`, {
+          method: "DELETE"
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          showMessage(data.message || "Failed to delete sale", "red");
+          return;
+        }
+
+        clearForm();
+        await loadSales();
+        showMessage("Sale deleted successfully", "#05713d");
+      } catch (err) {
+        showMessage("Error deleting sale", "red");
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("salesForm").reset();
+      document.getElementById("saleId").value = "";
+      document.getElementById("packageName").value = "";
+      
+      document.getElementById("classesAdded").value = 0;
+      document.getElementById("saleIdSelect").value = "";
+      isAddMode = false;
+      showMessage("", "");
+    }
+
+    function showMessage(text, color) {
+      const message = document.getElementById("message");
+      message.textContent = text;
+      message.style.color = color || "black";
+    }
+
+    function goToDashboard() {
+      window.location.href = "/index.html";
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "/login.html";
+    }
+
+    const role = localStorage.getItem("role");
+    const userManagementLink = document.getElementById("userManagementLink");
+
+    if (role === "admin" && userManagementLink) {
+      userManagementLink.style.display = "block";
+    }
+
+    document.getElementById("packageId").addEventListener("change", handlePackageChange);
+
+    loadCustomers();
+    loadPackages();
+    loadSales();
+  </script>
+</body>
+</html>

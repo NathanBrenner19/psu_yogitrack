@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit User</title>
+  <link rel="stylesheet" href="../css/style.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    .background {
+      background: url('images/YogaClass.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+    }
+
+    .overlay {
+      width: 100%;
+      min-height: 100vh;
+      background: rgba(255, 255, 255, 0.4);
+      padding: 20px;
+    }
+
+    .form-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: rgba(255,255,255,0.92);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.15);
+    }
+
+    h2 {
+      text-align: center;
+      color: #05713d;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="overlay">
+      <div class="form-container">
+        <h2>Edit User</h2>
+
+        <input type="text" id="firstName">
+        <label>First Name</label>
+        
+        <input type="text" id="lastName">
+        <label>Last Name</label>
+        
+        <input type="text" id="username">
+        <label>Username</label>
+        
+        <input type="email" id="email">
+        <label>Email</label>
+        
+        <input type="password" id="password">
+        <label>Password (leave blank to keep current password)</label>
+        
+
+        
+        <select id="role" class="styled-select">
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="instructor">Instructor</option>
+        </select>
+        <label>Role</label>
+
+        
+        <select id="isActive" class="styled-select">
+          <option value="true">true</option>
+          <option value="false">false</option>
+        </select>
+        <label>Active</label>
+
+        <div class="btn-row">
+          <button class="btn btn--primary" onclick="updateUser()">Save Changes</button>
+          <button class="btn" onclick="goBack()">Back</button>
+        </div>
+
+        <div class="message" id="message"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const role = localStorage.getItem("role");
+    if (role !== "admin") {
+      window.location.href = "../login.html";
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("userId");
+
+    async function loadUser() {
+      const message = document.getElementById("message");
+
+      try {
+        const res = await fetch(`/api/user/${userId}`, {
+          headers: {
+            "x-user-role": role
+          }
+        });
+
+        const user = await res.json();
+
+        if (!res.ok) {
+          message.style.color = "red";
+          message.textContent = user.message || "Could not load user";
+          return;
+        }
+
+        document.getElementById("firstName").value = user.firstName || "";
+        document.getElementById("lastName").value = user.lastName || "";
+        document.getElementById("username").value = user.username || "";
+        document.getElementById("email").value = user.email || "";
+        document.getElementById("role").value = user.role || "manager";
+        document.getElementById("isActive").value = String(user.isActive);
+      } catch (err) {
+        message.style.color = "red";
+        message.textContent = "Error connecting to server";
+      }
+    }
+
+    async function updateUser() {
+      const message = document.getElementById("message");
+
+      const body = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        role: document.getElementById("role").value,
+        isActive: document.getElementById("isActive").value === "true"
+      };
+
+      const password = document.getElementById("password").value;
+      if (password.trim() !== "") {
+        body.password = password;
+      }
+
+      try {
+        const res = await fetch(`/api/user/${userId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-role": role
+          },
+          body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          message.style.color = "red";
+          message.textContent = data.message || "Update failed";
+          return;
+        }
+
+        message.style.color = "green";
+        message.textContent = "User updated successfully";
+      } catch (err) {
+        message.style.color = "red";
+        message.textContent = "Error connecting to server";
+      }
+    }
+
+    function goBack() {
+      window.location.href = "manageUsers.html";
+    }
+
+    loadUser();
+  </script>
+</body>
+</html>
