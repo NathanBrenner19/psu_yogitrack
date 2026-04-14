@@ -38,12 +38,10 @@
       </label>
 
       <label>
-        <!-- Toggle with InstructorIdLabel -->
-         <label id="instructorIdTextLabel" style="display: none;">Instructor ID</label>
-         <input id="instructorIdText" type="text" readonly/>
-      </label>
-
-      <input type="text" id="instructorIdText" name="instructorId" readonly hidden />
+        <!-- Toggle with ClassIdLabel -->
+        <label id="instructorIdLabel" style="display: none;">Instructor ID</label>
+        <input id="instructorIdText" type="text" style="display: none;" readonly/>
+    </label>
 
 
       <div class="grid-2">
@@ -78,12 +76,9 @@
 
       <!-- Action buttons -->
       <div class="btn-row">
-        <button type="button" class="btn" id="searchBtn">Search</button>
-        <button type="button" class="btn btn--primary", id="addBtn">Add&nbsp;New</button>
-        <button type="button" class="btn", id="saveBtn">Save</button>
+        <button type="button" class="btn btn--primary", id="saveBtn">Save</button>
         <button type="button" class="btn btn--danger" id="deleteBtn">Delete</button>
         <button type="button" class="btn" onclick="clearInstructorForm()">Clear</button>
-        <a href="dashboard.html" class="btn">Exit</a>
       </div>
     </form>
     </div>

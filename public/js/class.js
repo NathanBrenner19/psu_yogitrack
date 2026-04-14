@@ -171,4 +171,5 @@ function clearClassForm(){
     document.getElementById("classForm").reset();
     document.getElementById("classIdSelect").innerHTML = `<option value="">-- Select Class ID --</option>`;
     document.getElementById("classTimeSelect").innerHTML = `<option value="">-- Select WeekDay --</option>`;
+    initClassDropdown();
 }

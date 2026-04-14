@@ -245,3 +245,9 @@ async function addPackageDropdownListener() {
         }
     });
 }
+
+function clearPackageForm() {
+    document.getElementById("addPackageForm").reset();
+    document.getElementById("packageIdText").value = "";
+    initPackageDropdown();
+}

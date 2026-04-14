@@ -1,8 +1,6 @@
 function requireAdmin(req, res, next) {
     const userRole = req.headers["x-user-role"];
 
-    //console.log("ADMIN CHECK:", req.headers["x-user-role"]);
-
     if (!userRole) {
         return res.status(401).json({ message: "No user role provided" });
     }

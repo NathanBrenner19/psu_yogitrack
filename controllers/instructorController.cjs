@@ -31,70 +31,64 @@ exports.getInstructor = async (req, res) => {
 
 exports.add = async (req, res) => {
   try {
-    const {
-      instructorId,
-      firstname,
-      lastname,
-      email,
-      phone,
-      address,
-      preferredContact
-    } = req.body;
+    const data = req.body;
+    let instructorId = data.instructorId?.trim();
 
-    // Basic validation
-    if (!firstname || !lastname || !email || !phone) {
-      return res.status(400).json({ message: "Missing required fields" });
+    // Check if we are attempting an UPDATE
+    if (instructorId) {
+      const existing = await Instructor.findOne({ instructorId });
+
+      if (existing) {
+        // Update the existing document fields
+        existing.firstname = data.firstname;
+        existing.lastname = data.lastname;
+        existing.email = data.email;
+        existing.phone = data.phone;
+        existing.address = data.address;
+        existing.preferredContact = data.preferredContact;
+
+        await existing.save();
+        return res.json({ message: "Instructor updated", instructorId });
+      } 
     }
 
-    // Create a new instructor document
+    // Logic for NEW Instructor
+    const lastInstructor = await Instructor.findOne().sort({ instructorId: -1 });
+    let newId = "I001";
+
+    if (lastInstructor) {
+      const lastNumber = parseInt(lastInstructor.instructorId.substring(1), 10);
+      newId = "I" + (lastNumber + 1).toString().padStart(3, "0");
+    }
+
     const newInstructor = new Instructor({
-      instructorId,
-      firstname,
-      lastname,
-      address,
-      phone,
-      email,
-      preferredContact
+      instructorId: newId,
+      firstname: data.firstname,
+      lastname: data.lastname,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      preferredContact: data.preferredContact
     });
 
-    // Save to database
     await newInstructor.save();
-    res.status(201).json({ message: "Instructor added successfully", instructor: newInstructor });
+    res.status(201).json({ message: "Instructor created", instructorId: newId });
+
   } catch (err) {
-    console.error("Error adding instructor:", err.message);
-    res.status(500).json({ message: "Failed to add instructor", error: err.message });
+    console.error("Error in add/update:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 //Populate the instructorId dropdown
 exports.getInstructorIds = async (req, res) => {
   try {
-    const instructors = await Instructor.find(
-      {},
-      { instructorId: 1, firstname: 1, lastname: 1, _id: 0 }
-    ).sort();
+    const instructors = await Instructor.find({});
 
     res.json(instructors);
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
-};
-
-exports.getNextId = async (req, res) => {
-  const lastInstructor = await Instructor.find({})
-    .sort({ instructorId: -1 })
-    .limit(1);
-
-  let maxNumber = 1;
-  if (lastInstructor.length > 0) {
-    const lastId = lastInstructor[0].instructorId;
-    const match = lastId.match(/\d+$/);
-    if (match) {
-      maxNumber = parseInt(match[0]) + 1;
-    }
-  }
-  const nextId = `I${maxNumber}`;
-  res.json({ nextId });
 };
 
 exports.deleteInstructor = async (req, res) => {

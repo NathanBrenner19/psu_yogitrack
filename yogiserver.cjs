@@ -6,8 +6,6 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const seedAdmin = require("./config/seedAdmin.cjs");
-
 app.use("/api/auth", require("./routes/authRoutes.cjs"));
 app.use("/api/user", require("./routes/userRoutes.cjs"));
 app.use("/api/sale", require("./routes/saleRoutes.cjs"));
@@ -23,4 +21,3 @@ app.listen(PORT, function () {
   console.log(`Listening on port ${PORT}...`);
   console.log('Open http://localhost:8080/login.html in your browser to view the app.');
 });
-seedAdmin();

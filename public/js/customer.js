@@ -180,8 +180,5 @@ function addCustomerDropdownListener() {
 
 function clearCustomerForm() {
   document.getElementById("customerForm").reset();
-  document.getElementById("customerIdSelect").innerHTML =
-    `<option value="">-- Select Customer ID --</option>`;
   document.getElementById("customerIdText").value = "";
-  document.getElementById("customerForm").classBalance.value = 0;
 }
