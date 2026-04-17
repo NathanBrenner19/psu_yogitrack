@@ -19,10 +19,12 @@
     "start": "node yogiserver.cjs"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "express": "^5.2.1",
     "heroku": "^8.7.1",
     "mongodb": "^7.1.0",
     "mongoose": "^9.2.1",
     "mongoose-int32": "^0.6.0"
-  }
+  },
+  "keywords": []
 }
