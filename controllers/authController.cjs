@@ -14,7 +14,7 @@ exports.login = async (req, res) => {
             });
         }
 
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ username, isActive: true });
 
         if (!user) {
             return res.status(400).json({ message: "User not found" });

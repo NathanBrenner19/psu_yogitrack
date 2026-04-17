@@ -1,132 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function() {
+      const role = localStorage.getItem("role");
+      // If they aren't an admin, send them back to the dashboard
+      if (role !== "admin") {
+        alert("Unauthorized access!");
+        try {
+          window.location.href = "../login.html";
+        } catch (err) {
+          console.warn("Redirection blocked in preview environment.");
+        }
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <title>YogiTrack Packages</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="layout--sidebar">
-  <!-- Re-use the same sidebar -->
-  <aside class="sidebar">
-    <a class="logo-wrap" href="dashboard.html">
-      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
+<body class="layout--top-nav">
+  
+  <!-- Modern Top Navigation Bar -->
+  <header class="top-header">
+    <a class="logo-wrap" href="customer.html">
+      <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
     </a>
-  <nav class="nav">
-    <a href="instructor.html">Instructors</a>
-    <a href="packages.html">Packages</a>
-    <a href="class.html">Class Schedule</a>
-    <a href="customer.html">Customers</a>
-    <a href="sales.html">Sales</a>
-    <a href="#">Check-ins</a>
-    <a href="manageUsers.html" id="userManagementLink" style="display: none;">User Management</a>
-    <a href="../login.html">Log Out</a>
-  </nav>
-  </aside>
+    
+    <nav class="nav">
+        <a href="instructor.html" class="admin-only">Instructors</a>
+        <a href="packages.html" class="admin-only active">Packages</a>
+        <a href="class.html" class="admin-only">Class Schedule</a>
+        <a href="customer.html">Customers</a>
+        <a href="sales.html">Sales</a>
+        <a href="check-in.html">Check-ins</a>
+        <a href="manageUsers.html" class="admin-only">User Management</a>
+        <a href="../login.html" class="logout-link">Log Out</a>
+    </nav>
+  </header>
 
-  <!-- Package tables -->
+  <!-- Main Content Area -->
   <main>
     <div class="overlay">
-    <section class="layout--center--top packages-page">
-      <div class="packages-page-content">
-      <div class="table-layout">
-        <!-- General packages table-->
-        <section class="table-card">
-          <div class="table-responsive-wrapper">
-          <h1 class="table-title">General Packages</h1>
-          <table class="package-table" id="generalPackageTable">
-            <thead>
-              <tr>
-                <th>Package ID</th>
-                <th>Package Name</th>
-                <th>Description</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody id="generalPackageTableBody">
-              <!-- Rows will be populated by JavaScript -->
-            </tbody>
-          </table>
-          </div>
-        </section>
+      <section class="packages-page-content" style="width: 100%; max-width: 1200px; margin: 0 auto;">
+        
+        <!-- Table Layout Grid -->
+        <div class="table-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+          
+          <!-- General packages table -->
+          <section class="table-card" style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <h2 class="table-title" style="text-align: center; color: var(--primary-purple); margin-bottom: 1.5rem;">General Packages</h2>
+            <div class="table-responsive-wrapper">
+              <table class="package-table" id="generalPackageTable">
+                <thead>
+                  <tr>
+                    <th>Package ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody id="generalPackageTableBody">
+                  <!-- Rows will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-        <!-- Special packages table-->
-        <section class="table-card">
-        <div class="table-responsive-wrapper">
-          <h1 class="table-title">Senior Packages</h1>
-          <table class="package-table" id="specialPackageTable">
-            <thead>
-              <tr>
-                <th>Package ID</th>
-                <th>Package Name</th>
-                <th>Description</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody id="specialPackageTableBody">
-              <!-- Rows will be populated by JavaScript -->
-            </tbody>
-          </table>
-          </div>
-        </section>
-      </div>
+          <!-- Special packages table -->
+          <section class="table-card" style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <h2 class="table-title" style="text-align: center; color: var(--primary-purple); margin-bottom: 1.5rem;">Senior Packages</h2>
+            <div class="table-responsive-wrapper">
+              <table class="package-table" id="specialPackageTable">
+                <thead>
+                  <tr>
+                    <th>Package ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody id="specialPackageTableBody">
+                  <!-- Rows will be populated by JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
 
-      <div class="package-forms-stack">
-        <section id="section-add" class="package-form-section" aria-labelledby="section-add-heading">
-          <form class="card card--wide" id="addPackageForm">
-            <h2 id="section-add-heading">Package Details</h2>
+        <!-- Form Section -->
+        <div class="package-forms-stack" style="display: flex; justify-content: center;">
+          <section id="section-add" class="package-form-section" style="width: 100%; max-width: 600px;">
+            <form class="card card--wide" id="addPackageForm">
+              <h2 id="section-add-heading">Package Details</h2>
 
-            <!-- Package Id -->
-            <label id="classIdLabel">Package ID
-              <select name="packageId" id="packageIdSelect" class="form-input">
-                <option value="">-- Select Package ID --</option>
-              <!-- Options will be populated by JavaScript-->
-              </select>
-            </label>
+              <!-- Package Id Selection -->
+              <label id="classIdLabel">Package ID
+                <select name="packageId" id="packageIdSelect" class="form-input styled-select">
+                  <option value="">-- Select Package ID --</option>
+                  <!-- Options populated by JS -->
+                </select>
+              </label>
 
-       
-       <label>
-          <!-- Toggle with ClassIdLabel -->
-          <label id="packageIdTextLabel" style="display: none;">Package ID</label>
-          <input id="packageIdText" type="text" style="display: none;" readonly/>
-      </label>
-
-            <fieldset>
-              <legend>Package Type</legend>
-              <div class="radio-row">
-                <label><input type="radio" name="packageType" value="general"> General</label>
-                <label><input type="radio" name="packageType" value="special"> Senior</label>
+              <!-- Manual ID Display (Hidden by default) -->
+              <div style="margin-bottom: 1rem;">
+                <label id="packageIdTextLabel" style="display: none;">Package ID</label>
+                <input id="packageIdText" type="text" style="display: none;" class="form-input" readonly/>
               </div>
-            </fieldset>
 
-            <div>
+              <!-- Package Type Selection -->
+              <fieldset class="modern-fieldset">
+                <legend>Package Type</legend>
+                <div class="radio-row">
+                  <label class="radio-label"><input type="radio" name="packageType" value="general"> General</label>
+                  <label class="radio-label"><input type="radio" name="packageType" value="special"> Senior</label>
+                </div>
+              </fieldset>
+
+              <!-- Package Name -->
               <label for="addPackageName">Package&nbsp;Name
-                <input type="text" name="packageName" id="addPackageName" autocomplete="off">
+                <input type="text" name="packageName" id="addPackageName" class="form-input" autocomplete="off">
               </label>
-            </div>
 
-            <label for="addPackageDescription">Description
-              <textarea name="description" id="addPackageDescription" rows="2"></textarea>
-            </label>
-
-            <div class="grid-2">
-              <label for="addPackagePrice">Price
-                <input type="number" name="price" id="addPackagePrice" step="0.01" min="0">
+              <!-- Description -->
+              <label for="addPackageDescription">Description
+                <textarea name="description" id="addPackageDescription" class="form-input" rows="2"></textarea>
               </label>
-            </div>
 
-            <div class="btn-row">
-              <button type="submit" class="btn btn--primary">Save Package</button>
-              <button type="button" class="btn btn--danger" id="deleteBtn">Delete Package</button>
-              <button type="button" class="btn" onclick="clearPackageForm()">Clear</button>
+              <!-- Price -->
+              <div class="grid-2">
+                <label for="addPackagePrice">Price
+                  <input type="number" name="price" id="addPackagePrice" class="form-input" step="0.01" min="0">
+                </label>
               </div>
-          </form>
-        </section>
 
-      </div>
-      </div>
-    </section>
+              <!-- Action Buttons -->
+              <div class="btn-row">
+                <button type="submit" class="btn btn--primary">Save Package</button>
+                <button type="button" class="btn btn--danger admin-only" id="deleteBtn">Delete</button>
+                <button type="button" class="btn btn--secondary" onclick="clearPackageForm()">Clear</button>
+              </div>
+            </form>
+          </section>
+        </div>
+
+      </section>
     </div>
   </main>
+  
   <script src="/js/packages.js"></script>
 </body>
 </html>

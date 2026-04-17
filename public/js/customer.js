@@ -1,59 +1,64 @@
 document.addEventListener("DOMContentLoaded", () => {
+  applyPermissions();
   initCustomerDropdown();
   addCustomerDropdownListener();
 });
 
 //Checks user role for user management tab
-const role = localStorage.getItem("role");
-    const userManagementLink = document.getElementById("userManagementLink");
+function applyPermissions() {
+  const role = localStorage.getItem("role");
 
-    if (role === "admin" && userManagementLink) {
-      userManagementLink.style.display = "block";
-    }
+  if (role !== "admin") {
+    // Find everything marked 'admin-only' and remove it from the DOM
+    const adminElements = document.querySelectorAll(".admin-only");
+    adminElements.forEach(el => el.remove());
+  }
+}
 
 // SAVE
-document.getElementById("addBtn").addEventListener("click", async () => {
+// 1. Attach the listener to the FORM, not the button
+const customerForm = document.getElementById("customerForm");
 
-  const form = document.getElementById("customerForm");
+customerForm.addEventListener("submit", async (event) => {
+  // 2. Prevent the page from refreshing
+  event.preventDefault();
 
-  const customerId = form.customerIdText.value.trim() || "";
-  const firstname = form.firstName.value.trim();
-  const lastname = form.lastName.value.trim();
+  const form = event.target;
+
+  // 3. Match the casing to what your controller expects (firstName, not firstname)
+  const customerId = document.getElementById("customerIdText")?.value.trim() || "";
+  const firstName = form.firstName.value.trim();
+  const lastName = form.lastName.value.trim();
   const address = form.address.value.trim();
   const phone = form.phone.value.trim();
   const email = form.email.value.trim();
-  const classBalance = 0;
+  const classBalance = form.classBalance.value || 0;
 
   let preferredContact = "";
-  if (form.pref[0].checked) {
+  if (form.pref.value === "phone") {
     preferredContact = "phone";
-  } else if (form.pref[1].checked) {
+  } else {
     preferredContact = "email";
   }
 
-
   try {
-    //Only check for duplicate name if we are creating a NEW customer
     if (!customerId) {
       const duplicateRes = await fetch(
-        `/api/customer/checkCustomerName?firstname=${encodeURIComponent(firstname)}&lastname=${encodeURIComponent(lastname)}`
+        `/api/customer/checkCustomerName?firstname=${encodeURIComponent(firstName)}&lastname=${encodeURIComponent(lastName)}`
       );
       const duplicateData = await duplicateRes.json();
 
       if (duplicateData.exists) {
-        const confirmDuplicate = confirm(
-          "A customer with the same name already exists. Do you want to continue anyway?"
-        );
-        if (!confirmDuplicate) {
+        if (!confirm("A customer with the same name already exists. Continue anyway?")) {
           return;
         }
       }
     }
 
     const customerData = {
-      customerId: customerId,
-      firstName: firstname,
-      lastName: lastname,
+      customerId,
+      firstName, // Corrected casing
+      lastName,  // Corrected casing
       address,
       phone,
       email,
@@ -63,23 +68,22 @@ document.getElementById("addBtn").addEventListener("click", async () => {
 
     const saveRes = await fetch("/api/customer/add", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(customerData)
     });
 
     const result = await saveRes.json();
 
     if (!saveRes.ok) {
-      throw new Error(result.message || "Failed to add customer");
+      throw new Error(result.message || "Failed to save customer");
     }
 
-    alert(`Customer ${result.customerId} saved successfully!`)
-
-    form.classBalance.value = 0;
-    clearCustomerForm();
-    initCustomerDropdown();
+    alert(result.message || "Customer profile saved successfully!");
+    
+    // Resetting form safely
+    form.reset();
+    if (typeof clearCustomerForm === "function") clearCustomerForm();
+    if (typeof initCustomerDropdown === "function") initCustomerDropdown();
 
   } catch (err) {
     alert("Error: " + err.message);

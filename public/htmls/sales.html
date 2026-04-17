@@ -3,173 +3,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YogiTrack - Sales</title>
+  <title>YogiTrack Sales</title>
   <link rel="stylesheet" href="../css/style.css" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-    }
-
-    .sales-panel {
-      position: relative;
-      z-index: 1;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 2rem;
-      border-radius: 1rem;
-      width: 100%;
-      max-width: 760px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
-    }
-
-    .sales-panel h2 {
-      text-align: center;
-      color: #05713d;
-      margin-bottom: 1.5rem;
-    }
-
-    .action-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: flex-end;
-      margin-top: 1rem;
-    }
-
-    .message {
-      margin-top: 1rem;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .readonly-box {
-      background: #f3f3f3;
-    }
-  </style>
 </head>
-<body class="layout--sidebar">
-  <!-- Re-use the same sidebar -->
-  <aside class="sidebar">
-    <a class="logo-wrap" href="dashboard.html">
-      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
-    </a>
+<body class="layout--top-nav">
+
+  <header class="top-header">
+    <div class="logo-wrap">
+      <a href="customer.html">
+        <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
+      </a>
+    </div>
     <nav class="nav">
-        <a href="instructor.html">Instructors</a>
-        <a href="packages.html">Packages</a>
-        <a href="class.html">Class Schedule</a>
+        <a href="instructor.html" class="admin-only">Instructors</a>
+        <a href="packages.html" class="admin-only">Packages</a>
+        <a href="class.html" class="admin-only">Class Schedule</a>
         <a href="customer.html">Customers</a>
-        <a href="sales.html">Sales</a>
-        <a href="#">Check-ins</a>
-        <a href="manageUsers.html" id="userManagementLink" style="display: none;">User Management</a>
-        <a href="../login.html">Log Out</a>
+        <a href="sales.html" class="active">Sales</a>
+        <a href="check-in.html">Check-ins</a>
+        <a href="manageUsers.html" class="admin-only">User Management</a>
+        <a href="../login.html" class="logout-link">Log Out</a>
     </nav>
-  </aside>
+  </header>
 
-        <main class="main-bg">
-          <div class="overlay" style="justify-content: center; align-items: center; width: 100%;">
-          <div class="sales-panel">
-            <h2>Record Sale</h2>
+  <main>
+    <div class="overlay">
+      <div class="card card--wide"> <h2>Record Sale</h2>
 
-            <label>
-              Existing Sale ID
-              <select id="saleIdSelect" class="styled-select">
-                <option value="">-- Select Sale ID --</option>
+        <div class="form-group">
+          <label for="saleIdSelect">Existing Sale ID</label>
+          <select id="saleIdSelect" class="form-input styled-select">
+            <option value="">-- Select Sale ID --</option>
+          </select>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+
+        <form id="salesForm">
+          <div class="grid-2">
+            <label>Sale ID
+              <input type="text" id="saleId" class="form-input" readonly />
+            </label>
+
+            <label>Payment Method
+              <select id="paymentMethod" class="form-input styled-select">
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="zelle">Zelle</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>Customer
+              <select id="customerId" class="form-input styled-select">
+                <option value="">-- Select Customer --</option>
               </select>
             </label>
 
-            <form id="salesForm">
-              <div class="grid-2">
-                <label>
-                  Sale ID
-                  <input type="text" id="saleId" class="readonly-box" readonly />
-                </label>
-
-                <label>
-                  Payment Method
-                  <select id="paymentMethod" class="styled-select">
-                    <option value="cash">Cash</option>
-                    <option value="card">Card</option>
-                    <option value="zelle">Zelle</option>
-                    <option value="other">Other</option>
-                  </select>
-                </label>
-              </div>
-
-              <div class="grid-2">
-                <label>
-                  Customer
-                  <select id="customerId" class="styled-select">
-                    <option value="">-- Select Customer --</option>
-                  </select>
-                </label>
-
-                <label>
-                  Package
-                  <select id="packageId" class="styled-select" >
-                    <option value="" >-- Select Package --</option>
-                  </select>
-                </label>
-              </div>
-
-              <div class="grid-2">
-                <label>
-                  Package Name
-                  <input type="text" id="packageName" class="readonly-box" readonly />
-                </label>
-
-                <label>
-                  Amount Paid
-                  <input type="number" id="amountPaid" step="0.01" min="0" />
-                </label>
-              </div>
-
-              <div class="grid-2">
-                <label>
-                  Validity Start Date
-                  <input type="date" id="validityStartDate" />
-                </label>
-
-                <label>
-                  Validity End Date
-                  <input type="date" id="validityEndDate" />
-                </label>
-              </div>
-
-              <div class="grid-2">
-                <label>
-                    Classes Added
-                    <input type="number" id="classesAdded" class="readonly-box" readonly />
-                </label>
-                </div>
-
-              <div class="action-row">
-                <button type="button" class="btn btn--primary" onclick="saveSale()">Save</button>
-                <button type="button" class="btn btn--danger" onclick="deleteSale()">Delete</button>
-                <button type="button" class="btn" onclick="clearForm()">Clear</button>
-                
-              </div>
-
-              <div class="message" id="message"></div>
-            </form>
+            <label>Package
+              <select id="packageId" class="form-input styled-select">
+                <option value="">-- Select Package --</option>
+              </select>
+            </label>
           </div>
-          </div>
-        </main>
 
+          <div class="grid-2">
+            <label>Package Name
+              <input type="text" id="packageName" class="form-input" readonly />
+            </label>
+
+            <label>Amount Paid
+              <input type="number" id="amountPaid" class="form-input" step="0.01" min="0" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>Validity Start Date
+              <input type="date" id="validityStartDate" class="form-input" />
+            </label>
+
+            <label>Validity End Date
+              <input type="date" id="validityEndDate" class="form-input" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>Classes Added
+              <input type="number" id="classesAdded" class="form-input" readonly />
+            </label>
+            <div></div> </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn--secondary" onclick="clearForm()">Clear</button>
+            <button type="button" class="btn btn--danger admin-only" id="deleteBtn" onclick="deleteSale()">Delete</button>
+            <button type="button" class="btn btn--primary" id="saveBtn" onclick="saveSale()">Save Sale</button>
+          </div>
+
+          <div class="message" id="message" style="margin-top: 1rem; text-align: center; font-weight: 600;"></div>
+        </form>
       </div>
     </div>
-  </div>
+  </main>
 
   <script>
     let packagesCache = [];
 
     document.addEventListener("DOMContentLoaded", () => {
+      applyPermissions();
       loadSelectedSale();
     });
 
     function getClassesFromPackageName(name) {
       const lower = (name || "").toLowerCase();
-      if (lower.includes("single")) return 1;
+      if (lower.includes("1 class")) return 1;
       if (lower.includes("4 class")) return 4;
       if (lower.includes("10 class")) return 10;
       if (lower.includes("unlimited")) return 9999;
@@ -238,7 +186,6 @@
     async function loadSelectedSale() {
       const select = document.getElementById("saleIdSelect");
       
-      
       select.addEventListener( "change", async () => {
         const saleId = document.getElementById("saleIdSelect").value;
 
@@ -256,9 +203,8 @@
             return;
           }
 
-          isAddMode = false;
           fillForm(sale);
-          showMessage("Sale loaded", "#05713d");
+          showMessage("Sale loaded", "#7B338D"); // Updated to brand purple
         } catch (err) {
           showMessage("Error loading sale", "red");
         }
@@ -284,7 +230,6 @@
 
       if (!selectedOption || !selectedOption.value) {
         document.getElementById("packageName").value = "";
-        document.getElementById("packageType").value = "";
         document.getElementById("amountPaid").value = "";
         document.getElementById("classesAdded").value = 0;
         return;
@@ -292,17 +237,13 @@
 
       const pkgName = selectedOption.dataset.name || "";
       const pkgPrice = selectedOption.dataset.price || "";
-      
 
       document.getElementById("packageName").value = pkgName;
-      
       document.getElementById("amountPaid").value = pkgPrice;
       document.getElementById("classesAdded").value = getClassesFromPackageName(pkgName);
     }
 
     async function saveSale() {
-      const saleId = document.getElementById("saleId").value.trim();
-
       const body = {
         customerId: document.getElementById("customerId").value,
         packageId: document.getElementById("packageId").value,
@@ -320,9 +261,7 @@
       try {
         const res = await fetch("/api/sale/add", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body)
         });
 
@@ -334,10 +273,9 @@
         }
 
         fillForm(data.sale);
-        isAddMode = false;
         await loadSales();
         document.getElementById("saleIdSelect").value = data.sale.saleId;
-        showMessage(`Sale recorded successfully. New balance: ${data.updatedCustomerBalance}`, "#05713d");
+        showMessage(`Sale recorded successfully. New balance: ${data.updatedCustomerBalance}`, "#8DC63F");
       } catch (err) {
         showMessage("Error saving sale", "red");
       }
@@ -369,7 +307,7 @@
 
         clearForm();
         await loadSales();
-        showMessage("Sale deleted successfully", "#05713d");
+        showMessage("Sale deleted successfully", "#7B338D");
       } catch (err) {
         showMessage("Error deleting sale", "red");
       }
@@ -379,33 +317,17 @@
       document.getElementById("salesForm").reset();
       document.getElementById("saleId").value = "";
       document.getElementById("packageName").value = "";
-      
       document.getElementById("classesAdded").value = 0;
       document.getElementById("saleIdSelect").value = "";
-      isAddMode = false;
       showMessage("", "");
     }
 
-    function showMessage(text, color) {
-      const message = document.getElementById("message");
-      message.textContent = text;
-      message.style.color = color || "black";
-    }
-
-    function goToDashboard() {
-      window.location.href = "/index.html";
-    }
-
-    function logout() {
-      localStorage.clear();
-      window.location.href = "/login.html";
-    }
-
-    const role = localStorage.getItem("role");
-    const userManagementLink = document.getElementById("userManagementLink");
-
-    if (role === "admin" && userManagementLink) {
-      userManagementLink.style.display = "block";
+    function applyPermissions() {
+      const role = localStorage.getItem("role");
+      if (role !== "admin") {
+        const adminElements = document.querySelectorAll(".admin-only");
+        adminElements.forEach(el => el.remove());
+      }
     }
 
     document.getElementById("packageId").addEventListener("change", handlePackageChange);

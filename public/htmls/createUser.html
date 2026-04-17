@@ -1,99 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function() {
+      const role = localStorage.getItem("role");
+      if (role !== "admin") {
+        alert("Unauthorized access!");
+        window.location.href = "../login.html";
+      }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create User</title>
+  <title>Create User - YogiTrack</title>
   <link rel="stylesheet" href="../css/style.css">
-
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-    }
-
-    .page-wrap {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-
-    .form-card {
-      position: relative;
-      z-index: 1;
-      background: rgba(255, 255, 255, 0.88);
-      padding: 2rem;
-      border-radius: 1rem;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
-    }
-
-    .form-card h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #05713d;
-    }
-
-    .message {
-      margin-top: 1rem;
-      font-weight: bold;
-      text-align: center;
-    }
-  </style>
 </head>
-<body>
-    <div class="overlay" style="justify-content: center; align-items: center; width: 100%;">
-      <div class="page-wrap">
-        <div class="form-card">
-          <h2>Create New User</h2>
+<body class="layout--top-nav">
 
-          <input type="text" id="firstName" />
-          <label for="firstName">First Name</label>
+  <header class="top-header">
+    <div class="logo-wrap">
+      <a href="customer.html">
+        <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
+      </a>
+    </div>
+    <nav class="nav">
+        <a href="instructor.html" class="admin-only">Instructors</a>
+        <a href="packages.html" class="admin-only">Packages</a>
+        <a href="class.html" class="admin-only">Class Schedule</a>
+        <a href="customer.html">Customers</a>
+        <a href="sales.html">Sales</a>
+        <a href="check-in.html">Check-ins</a>
+        <a href="manageUsers.html" class="admin-only active">User Management</a>
+        <a href="../login.html" class="logout-link">Log Out</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="overlay">
+      <div class="card">
+        <h2>Create New User</h2>
+        <p class="text--muted" style="margin-bottom: 1.5rem;">Register a new staff member or instructor.</p>
+
+        <div class="grid-2">
+          <label>First Name
+            <input type="text" id="firstName" class="form-input" required>
+          </label>
           
-
-          <input type="text" id="lastName" />
-          <label for="lastName">Last Name</label>
-          
-
-          <input type="text" id="username" />
-          <label for="username">Username</label>
-          
-
-          <input type="email" id="email" />
-          <label for="email">Email</label>
-         
-
-          <input type="password" id="password" />
-          <label for="password">Password</label>
-          
-
-          
-          <select id="role" class="styled-select">
-            <option value="instructor">Instructor</option>
-            <option value="manager">Manager</option>
-            <option value="admin">Admin</option>
-          </select>
-          <label for="role">Role</label>
-
-          <div class="btn-row">
-            <button class="btn btn--primary" onclick="createUser()">Create User</button>
-            <button class="btn" onclick="goBack()">Back</button>
-          </div>
-
-          <div class="message" id="message"></div>
+          <label>Last Name
+            <input type="text" id="lastName" class="form-input" required>
+          </label>
         </div>
+        
+        <label>Username
+          <input type="text" id="username" class="form-input" required>
+        </label>
+        
+        <label>Email
+          <input type="email" id="email" class="form-input" required>
+        </label>
+        
+        <label>Password
+          <input type="password" id="password" class="form-input" required>
+        </label>
+        
+        <div class="form-group">
+          <label>Role
+            <select id="role" class="form-input styled-select">
+              <option value="instructor">Instructor</option>
+              <option value="admin">Admin</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn--secondary" onclick="goBack()">Back</button>
+          <button class="btn btn--primary" onclick="createUser()">Create User</button>
+        </div>
+
+        <div class="message" id="message" style="margin-top: 1rem; text-align: center; font-weight: 600;"></div>
       </div>
     </div>
+  </main>
 
   <script>
     const role = localStorage.getItem("role");
-
     if (role !== "admin") {
       window.location.href = "../login.html";
     }
@@ -125,15 +115,22 @@
         const data = await res.json();
 
         if (!res.ok) {
-          message.style.color = "red";
+          message.style.color = "var(--danger-red)";
           message.textContent = data.message || "User creation failed";
           return;
         }
 
-        message.style.color = "#05713d";
+        message.style.color = "var(--accent-green)";
         message.textContent = "User created successfully";
+        
+        // Clear form after success
+        document.getElementById("firstName").value = "";
+        document.getElementById("lastName").value = "";
+        document.getElementById("username").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
       } catch (err) {
-        message.style.color = "red";
+        message.style.color = "var(--danger-red)";
         message.textContent = "Error connecting to server";
       }
     }

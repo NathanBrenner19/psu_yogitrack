@@ -1,89 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function() {
+      const role = localStorage.getItem("role");
+      // If they aren't an admin, send them back to the dashboard
+      if (role !== "admin") {
+        alert("Unauthorized access!");
+        try {
+          window.location.href = "../login.html";
+        } catch (err) {
+          // Prevents the "'' is not a valid URL" error in sandbox/preview environments
+          console.warn("Redirection blocked in preview environment.");
+        }
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
-  <title>YogiTrack • Instructors</title>
+  <title>YogiTrack Instructors</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="layout--sidebar">
-  <!-- Re-use the same sidebar -->
-  <aside class="sidebar">
-    <a class="logo-wrap" href="dashboard.html">
-      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
+<!-- Changed layout class from sidebar to top-nav -->
+<body class="layout--top-nav">
+  
+  <!-- Modern Top Navigation Bar -->
+  <header class="top-header">
+    <a class="logo-wrap" href="customer.html">
+      <!-- Added a generic height to ensure the logo fits well in a top bar -->
+      <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
     </a>
+    
     <nav class="nav">
-        <a href="instructor.html">Instructors</a>
-        <a href="packages.html">Packages</a>
-        <a href="class.html">Class Schedule</a>
+        <a href="instructor.html" class="admin-only active">Instructors</a>
+        <a href="packages.html" class="admin-only">Packages</a>
+        <a href="class.html" class="admin-only">Class Schedule</a>
         <a href="customer.html">Customers</a>
         <a href="sales.html">Sales</a>
-        <a href="#">Check-ins</a>
-        <a href="manageUsers.html" id="userManagementLink" style="display: none;">User Management</a>
-        <a href="../login.html">Log Out</a>
+        <a href="check-in.html">Check-ins</a>
+        <a href="manageUsers.html" class="admin-only">User Management</a>
+        <a href="../login.html" class="logout-link">Log Out</a>
     </nav>
-  </aside>
+  </header>
 
-  <!-- Instructor form -->
+  <!-- Main Content Area -->
   <main>
-    <div class="overlay" style="justify-content: center; align-items: center; width: 100%;">
-    <form class="card" id="instructorForm" >
-      <h2>Instructor Details</h2>
+    <div class="overlay">
+      <form class="card" id="instructorForm">
+        <h2>Instructor Details</h2>
 
-      <!-- Instructor Id-->
-      <label id = "instructorIdLabel" for="instructorID">Instructor ID
-        <select name="instructorId" id="instructorIdSelect" class="form-input" required>
-          <option value=""> -- Select Instructor Id --</option>
-          <!-- Options will be populated by JavaScript-->
-        </select>
-      </label>
+        <!-- Instructor Id-->
+        <label id="instructorIdLabel" for="instructorID">Instructor ID
+          <select name="instructorId" id="instructorIdSelect" class="form-input" required>
+            <option value=""> -- Select Instructor Id --</option>
+            <!-- Options will be populated by JavaScript-->
+          </select>
+        </label>
 
-      <label>
         <!-- Toggle with ClassIdLabel -->
         <label id="instructorIdLabel" style="display: none;">Instructor ID</label>
         <input id="instructorIdText" type="text" style="display: none;" readonly/>
-    </label>
 
-
-      <div class="grid-2">
-        <label>First&nbsp;Name
-          <input type="text" name="firstname">
-        </label>
-        <label>Last&nbsp;Name
-          <input type="text" name="lastname">
-        </label>
-      </div>
-
-      <label>Address
-        <textarea name="address" rows="2"></textarea>
-      </label>
-
-      <div class="grid-2">
-        <label>Phone
-          <input type="tel" name="phone">
-        </label>
-        <label>Email
-          <input type="email" name="email">
-        </label>
-      </div>
-
-      <fieldset>
-        <legend>Preferred Contact</legend>
-        <div class="radio-row">
-          <label><input type="radio" name="pref" value="phone">Phone</label>
-          <label><input type="radio" name="pref" value="email">Email</label>
+        <div class="grid-2">
+          <label>First&nbsp;Name
+            <input type="text" name="firstname" class="form-input">
+          </label>
+          <label>Last&nbsp;Name
+            <input type="text" name="lastname" class="form-input">
+          </label>
         </div>
-      </fieldset>
 
-      <!-- Action buttons -->
-      <div class="btn-row">
-        <button type="button" class="btn btn--primary", id="saveBtn">Save</button>
-        <button type="button" class="btn btn--danger" id="deleteBtn">Delete</button>
-        <button type="button" class="btn" onclick="clearInstructorForm()">Clear</button>
-      </div>
-    </form>
+        <label>Address
+          <textarea name="address" rows="2" class="form-input"></textarea>
+        </label>
+
+        <div class="grid-2">
+          <label>Phone
+            <input type="tel" name="phone" class="form-input">
+          </label>
+          <label>Email
+            <input type="email" name="email" class="form-input">
+          </label>
+        </div>
+
+        <fieldset class="modern-fieldset">
+          <legend>Preferred Contact</legend>
+          <div class="radio-row">
+            <label class="radio-label"><input type="radio" name="pref" value="phone"> Phone</label>
+            <label class="radio-label"><input type="radio" name="pref" value="email"> Email</label>
+          </div>
+        </fieldset>
+
+        <!-- Action buttons -->
+        <div class="btn-row">
+          <!-- Button IDs left exactly as they were -->
+          <button type="button" class="btn btn--primary" id="saveBtn">Save Instructor</button>
+          <button type="button" class="btn btn--danger admin-only" id="deleteBtn">Delete</button>
+          <button type="button" class="btn btn--secondary" onclick="clearInstructorForm()">Clear</button>
+        </div>
+      </form>
     </div>
   </main>
 
-<script src="../js/instructor.js"></script>
+  <script src="../js/instructor.js"></script>
 </body>
 </html>

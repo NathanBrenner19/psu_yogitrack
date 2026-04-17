@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YogiTrack Check-ins</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="layout--top-nav"> <header class="top-header">
+    <div class="logo-wrap">
+      <a href="customer.html">
+        <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
+      </a>
+    </div>
+    <nav class="nav">
+        <a href="instructor.html" class="admin-only">Instructors</a>
+        <a href="packages.html" class="admin-only">Packages</a>
+        <a href="class.html" class="admin-only">Class Schedule</a>
+        <a href="customer.html">Customers</a>
+        <a href="sales.html">Sales</a>
+        <a href="check-in.html" class="active">Check-ins</a> <a href="manageUsers.html" class="admin-only">User Management</a>
+        <a href="../login.html" class="logout-link">Log Out</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="overlay">
+      <form class="card" id="checkInForm"> <h2>Customer Check-In</h2>
+
+        <div class="form-group">
+          <label id="customerIdLabel" for="customerIdSelect">Customer ID</label>
+          <select name="customerId" id="customerIdSelect" class="form-input styled-select">
+            <option value="">-- Select Customer ID --</option>
+          </select>
+
+          <label id="customerIdTextLabel" style="display:none;">Customer ID</label>
+          <input id="customerIdText" name="customerIdText" type="text" class="form-input" style="display:none;" readonly />
+        </div>
+          
+        <div class="form-group">
+          <label id="classIdLabel" for="classIdSelect">Class ID</label>
+          <select name="classId" id="classIdSelect" class="form-input styled-select">
+            <option value="">-- Select Class ID --</option>
+          </select>
+
+          <label id="classIdTextLabel" style="display:none;">Class ID</label>
+          <input id="classIdText" name="classIdText" type="text" class="form-input" style="display:none;" readonly/>
+        </div>
+
+        <div class="grid-2">
+            <label>Class Balance
+                <input type="number" name="classBalance" class="form-input" value="0" readonly />
+              </label>
+            
+            <label>Check-ins Date
+              <input type="date" id="checkInDate" class="form-input" />
+            </label>
+        </div>
+
+        <div class="btn-row">
+            <button type="button" class="btn btn--secondary" onclick="clearCustomerForm()">Clear</button>
+            <button type="submit" id="addBtn" class="btn btn--primary">Check-in</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="/js/check-in.js"></script>
+</body>
+</html>

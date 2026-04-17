@@ -1,405 +1,336 @@
+/* ---------- CSS Variables for Easy Theme Management ---------- */
+:root {
+  /* Logo Colors */
+  --primary-purple: #7B338D; /* Extracted from "yoga h'om" text */
+  --primary-purple-hover: #5A2468;
+  --accent-green: #8DC63F; /* Extracted from logo petals */
+  --accent-green-hover: #75A633;
+  
+  /* UI Colors */
+  --bg-light: #f5f7fa;
+  --text-main: #2d3748;
+  --text-muted: #718096;
+  --border-color: #e2e8f0;
+  --card-bg: #ffffff;
+  --danger-red: #e53e3e;
+  --danger-red-hover: #c53030;
+  
+  /* Shadows & Radius */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 10px 25px rgba(123, 51, 141, 0.08); /* Slight purple tint in shadow */
+  --radius-md: 8px;
+  --radius-lg: 16px;
+}
+
 /* ---------- Base & helpers ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f5f8f8;
-  color: #333;
-  display: flex; /* Keeps sidebar and main content side-by-side */
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-main);
   min-height: 100vh;
-  }
-h1 { margin: 0 0 1rem; font-weight: 600; }
-a { text-decoration: none; }
+}
 
-h2 {
-  color: #05713d;
-  margin: 0;
-  font-size: 1.75rem;
-  }
+h1, h2, h3 { margin: 0 0 1rem; font-weight: 600; color: var(--primary-purple); }
+h2 { font-size: 1.75rem; letter-spacing: -0.5px; }
+a { text-decoration: none; color: var(--primary-purple); transition: color 0.2s; }
+a:hover { color: var(--accent-green); }
 
 .text--center { text-align: center; }
 
 /* ---------- Layout variations ---------- */
-.layout--center {
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
-  width: 100%;
-  min-height: 100vh;
-  padding: 2rem;
-}
-.layout--sidebar { 
-  display: flex; 
-  min-height: 100vh; 
-}
-
-.layout--sidebar main {
-  flex: 1;
+.layout--top-nav {
   display: flex;
   flex-direction: column;
-}
-.layout--center--top {
-  display: flex; 
-  justify-content: center; 
-  align-items: flex-start;  
-  width: 100%;
-  height: 100vh;
-  padding: 2rem;
-}
-
-/* Packages page embeds forms below tables; allow vertical growth and scroll. */
-.layout--center--top.packages-page {
-  height: auto;
   min-height: 100vh;
 }
 
-.table-layout {
+/* ---------- Modern Top Navigation ---------- */
+.top-header {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+  padding: 0.75rem 2rem;
   display: flex;
-  /*flex-direction: column;*/
-  margin-bottom: 8px;
-  gap: 20px;
-  justify-content: center;
-  align-items: stretch;
-  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 3px solid var(--accent-green); /* Adds a pop of brand color */
 }
 
-.table-card {
-  flex: 1 1 0;
+.logo-wrap {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  height: 60px; /* Constrained height for horizontal nav */
+  width: auto;
+  object-fit: contain;
+}
+
+.nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav a {
+  color: var(--text-main);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
   position: relative;
 }
 
-.table-title {
-  text-align: center;
-  margin-bottom: 0.75rem;
+/* Hover underline effect */
+.nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-purple);
+  transition: width 0.3s ease;
 }
 
-
-/* ---------- Card ---------- */
-.card {
-  background: #fff; padding: 2rem; border-radius: 0.75rem;
-  box-shadow: 0 4px 14px rgba(0,0,0,.06); width: 100%; max-width: 480px;
+.nav a:hover::after, .nav a.active::after {
+  width: 100%;
 }
-.card--wide { max-width: 560px; }
 
-/* ---------- Sidebar ---------- */
-.sidebar {
-  width: 220px;
-  background: #bee6e0;
-  color: #05713d;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 2rem 1rem;
-  flex-shrink: 0; /* Prevents the sidebar from squishing when table is wide */
-  z-index: 10;
-  }
+.nav a:hover, .nav a.active {
+  color: var(--primary-purple);
+}
 
-  .logo-wrap {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    color: inherit;
-    font-weight: 600;
-    text-decoration: none;
-    }
+.nav a.logout-link {
+  color: var(--danger-red);
+  border: 1px solid var(--danger-red);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+}
 
-  .logo {
-     width: 100px;
-     height: 100px;
-     object-fit: contain;
-     }
+.nav a.logout-link::after { display: none; }
+.nav a.logout-link:hover { background: var(--danger-red); color: white; }
 
-  .nav {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    }
-
-  .nav a {
-    color: inherit;
-     text-decoration: none;
-     padding: .25rem 0;
-     transition: opacity 0.2s;
-     }
-  .nav a.active, .nav a:hover { opacity: .8; }
-
-/* ---------- Form elements ---------- */
-
-
+/* ---------- Main Content Area ---------- */
 main {
   flex: 1;
-  min-width: 0; 
   position: relative;
   background: url('../images/YogaClass.jpg') no-repeat center/cover fixed;
-  }
-
-input, textarea {
-  width: 100%; padding: .6rem .75rem; border: 1px solid #ccc;
-  border-radius: .5rem; font-size: 1rem; margin-top: .25rem;
-}
-textarea { resize: vertical; }
-
-label { display: block; font-size: .9rem; margin-bottom: .75rem; }
-
-fieldset { border: 1px solid #ddd; border-radius: .5rem; padding: .75rem 1rem; margin-bottom: 1rem; }
-legend { padding: 0 .25rem; }
-
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-/* ---------- Buttons ---------- */
-.btn {
-  display: inline-block; padding: .6rem 1.25rem; border-radius: .5rem;
-  background: #e0e0e0; color: #333; border: none; cursor: pointer; font-size: .95rem;
-}
-.btn:hover { background: #d5d5d5; }
-.btn--primary { background: #008080; color: #fff; }
-.btn--primary:hover { background: #006c6c; }
-.btn--edit { background: #eda909; color: #fff; }
-.btn--edit:hover { background: #c9900a; }
-.btn--danger { background: #c0392b; color: #fff; }
-.btn--danger:hover { background: #992a20; }
-
-.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: flex-end; margin-top: 0.75rem; }
-
-.table-btn-row {
-  justify-content: flex-end;
-  margin-top: 0.75rem;
-}
-
-.packages-page-content {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  align-items: stretch;
 }
 
-.package-forms-stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  width: 100%;
-  margin-top: 1.5rem;
-}
-
-.package-form-section {
-  scroll-margin-top: 1rem;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.package-form-subtitle {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 0.75rem;
-}
-
-/* Same table height in both columns: don't flex-grow to fill the card (first column
-   would become taller than the second, which shares space with the action buttons). */
-.table-card .package-table {
-  flex: 0 0 auto;
-  align-self: stretch;
-  width: 100%;
-}
-
-/* ---------- Background image for dashboard ---------- */
-/* ---------- Full-page background with faint overlay ---------- */
-.bg--image {
-  position: relative;                     /* ① establish containing block */
-  background: url('../images/YogaClass.jpg') no-repeat center/cover fixed;
-}
-
-/* ② the “veil” */
-.bg--image::before {
-  content: "";
-  position: absolute;
-  inset: 0;                               /* cover the whole body */
-  background: rgba(255, 255, 255, 0.55);  /* white veil @ 55% opacity */
-  /* Try rgba(0,128,128,.25) for a subtle teal tint instead */
-  pointer-events: none;                   /* don’t block clicks */
-  min-height: 100vh; 
-}
-
-
-.main-bg {
-  flex: 1;
-  position: relative;
-  background: url('../images/YogaClass.jpg') no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-/* Foreground content */
-.welcome-box {
-  position: relative;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 2.5rem 3rem;
-  border-radius: 1rem;
-  text-align: center;
-  max-width: 480px;
-  width: 100%;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
-}
-
-/* Background image applied to the layout wrapper */
-.background {
-  background: url('../images/YogaClass.jpg') no-repeat center center fixed;
-  background-size: cover;
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-}
-
-/* Only dims the main section */
+/* Modern Overlay */
 .overlay {
-  min-height: 100vh;
-  background: rgba(255, 255, 255, 0.6);
-  padding: 2rem;
+  flex: 1;
+  background: rgba(245, 247, 250, 0.85); /* Frosty light overlay instead of heavy white */
+  backdrop-filter: blur(4px); /* Adds a modern frosted glass effect */
+  padding: 3rem 2rem;
   display: flex;
-  flex-direction: column;
-  }
+  justify-content: center;
+  align-items: flex-start; /* Aligns card near the top rather than strict center */
+}
 
-.top-bar {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   margin-bottom: 1.5rem;
-   }
+/* ---------- Modern Card ---------- */
+.card {
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 550px;
+  border-top: 5px solid var(--primary-purple); /* Brand accent */
+}
 
-/* Make sure all layout content appears above the overlay */
-.layout--sidebar,
-.main-fill,
-.sidebar,
-.welcome-box {
-  position: relative;
-  z-index: 1;
+.card--wide { max-width: 800px; }
+
+/* ---------- Form Elements ---------- */
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: var(--text-main);
+}
+
+.form-input, select.form-input, input, textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
+  background: #f8fafc;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form-input:focus, select.form-input:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(123, 51, 141, 0.15); /* Purple focus ring */
+}
+
+textarea { resize: vertical; min-height: 80px; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Fieldset and Radios */
+.modern-fieldset {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  background: #f8fafc;
+}
+
+legend {
+  padding: 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-purple);
 }
 
 .radio-row {
   display: flex;
-  gap: 50px;
+  gap: 2rem;
   align-items: center;
-  justify-content: center; 
 }
 
-/* Matches style of text inputs */
-.form-input,
-select.form-input {
-  width: 100%;
-  padding: 8px 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 5px;
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 0;
+  font-weight: 400;
 }
 
-/* Style for select dropdown to match input fields */
+input[type="radio"], input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--primary-purple); /* Makes modern browsers use the brand color */
+  transform: scale(1.2);
+}
+
+/* Styled Select */
 .styled-select {
-  font-family: inherit;
-  font-size: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-  background-color: #fff;
-  appearance: none;       /* Remove default arrow */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="12" height="8" viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><path d="M1.41.59L6 5.17l4.59-4.58L12 2l-6 6-6-6z" fill="%23333"/></svg>');
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="12" height="8" viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><path d="M1.41.59L6 5.17l4.59-4.58L12 2l-6 6-6-6z" fill="%237B338D"/></svg>');
   background-repeat: no-repeat;
-  background-position: right 0.7rem top 50%;
-  background-size: 0.65rem auto;
+  background-position: right 1rem center;
+  background-size: 12px;
+  padding-right: 2.5rem;
 }
 
+/* ---------- Buttons ---------- */
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
 
-/* ---------- Table ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
+.btn--primary {
+  background: var(--primary-purple);
+  color: #fff;
+}
+.btn--primary:hover {
+  background: var(--primary-purple-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(123, 51, 141, 0.3);
+}
+
+.btn--secondary {
+  background: #edf2f7;
+  color: var(--text-main);
+}
+.btn--secondary:hover {
+  background: #e2e8f0;
+}
+
+.btn--danger {
+  background: var(--danger-red);
+  color: #fff;
+}
+.btn--danger:hover {
+  background: var(--danger-red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(229, 62, 62, 0.3);
+}
+
+/* ---------- Table Styles (Preserved & Modernized) ---------- */
 .table-responsive-wrapper {
   width: 100%;
-  overflow-x: auto; /* Adds horizontal scroll ONLY to the table if it overflows */
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow-x: auto;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 1.5rem;
-  }
+  border: 1px solid var(--border-color);
+}
 
 table {
-width: 100%;
-border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 th, td {
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   text-align: left;
-  border-bottom: 1px solid #eee;
-  }
+  border-bottom: 1px solid var(--border-color);
+}
 
 th {
-  background: #eef7f6;
-  color: #05713d;
+  background: #fdfafb; /* Very faint purple tint */
+  color: var(--primary-purple);
   font-weight: 600;
   white-space: nowrap;
-  word-break: break-word;
-  tr:last-child td {
-    border-bottom: none;
-    }
-  }
-
-/* ---------- Packages tables: keep both same size ---------- */
-.package-table {
-  width: 100%;
-  min-width: 0;
-  table-layout: fixed;
-  background: #fff;
-  border-radius: 5px;
+  border-bottom: 2px solid var(--border-color);
 }
 
-.package-table th,
-.package-table td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+tbody tr:hover {
+  background: #f8fafc;
 }
 
-/* Make header fixed and body scroll so table height stays equal */
-.package-table thead,
-.package-table tbody,
-.package-table tr {
-  display: block;
+tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.package-table thead tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+/* Text links */
+.link--text {
+  color: var(--primary-purple);
+  text-decoration: underline;
+  font-weight: 500;
 }
-
-.package-table tbody {
-  display: block;
-  width: 100%;
-  /* Slightly shorter tables so they don't feel as tall */
-  height: clamp(180px, 40vh, 420px);
-  overflow-y: auto;
-}
-
-.package-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-/* Keep package actions clear of tables on smaller screens */
-@media (max-width: 1200px) {
-  .table-btn-row {
-    flex-direction: column;
-    align-items: flex-end;
-  }
+.link--text:hover {
+  color: var(--accent-green);
 }

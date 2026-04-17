@@ -81,7 +81,7 @@ exports.add = async (req, res) => {
 
       await newCustomer.save();
 
-      res.status(201).json({message: "Customer created", customerId: newId});
+      res.status(201).json({message: "Customer created"});
     }
     catch (err){
       console.log(err);
@@ -129,6 +129,41 @@ exports.checkCustomerName = async (req, res) => {
     });
 
     res.json({ exists: !!existingCustomer });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.update = async (req, res) => {
+  try {
+    const { customerId } = req.query;
+
+    // Find and update in one go. 
+    const result = await Customer.findOneAndUpdate(
+      { customerId },
+      { $inc: { classBalance: -1 } },
+      { returnDocument: 'after' } 
+    );
+
+    // Handle missing customer
+    if (!result) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+
+    // Logic for low balance alert
+    if (result.classBalance < 0) {
+      return res.status(200).json({
+        message: "Update successful, but customer needs to buy more classes.",
+        currentBalance: result.classBalance
+      });
+    }
+
+    // Standard success response
+    res.status(200).json({
+      message: "Class deducted successfully",
+      currentBalance: result.classBalance
+    });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -1,107 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YogiTrack Class Schedule</title>
-  <link rel="stylesheet" href="../css/style.css" />
+    <script>
+        (function() {
+          const role = localStorage.getItem("role");
+          if (role !== "admin") {
+            alert("Unauthorized access!");
+            window.location.href = "../login.html";
+          }
+        })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YogiTrack Class Schedule</title>
+    <link rel="stylesheet" href="../css/style.css" />
 </head>
-<body class="layout--sidebar">
-  <!-- Re-use the same sidebar -->
-  <aside class="sidebar">
-    <a class="logo-wrap" href="dashboard.html">
-      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
-    </a>
-    <nav class="nav">
-        <a href="instructor.html">Instructors</a>
-        <a href="packages.html">Packages</a>
-        <a href="class.html">Class Schedule</a>
-        <a href="customer.html">Customers</a>
-        <a href="sales.html">Sales</a>
-        <a href="#">Check-ins</a>
-        <a href="manageUsers.html" id="userManagementLink" style="display: none;">User Management</a>
-        <a href="../login.html">Log Out</a>
-    </nav>
-  </aside>
-
-  <main>
-    <div class="overlay" style="justify-content: center; align-items: center; width: 100%;">
-    <form class="card" id="classForm">
-        <h2>Class Details</h2>
-
-        <!-- Class Id -->
-         <label id="classIdLabel">Class ID
-            <select name="classId" id="classIdSelect" class="form-input">
-                <option value="">-- Select Class ID --</option>
-                <!-- Options will be populated by JavaScript-->
-            </select>
-         </label>
-
-         
-         <label>
-            <!-- Toggle with ClassIdLabel -->
-            <label id="classIdTextLabel" style="display: none;">Class ID</label>
-            <input id="classIdText" type="text" style="display: none;" readonly/>
-        </label>
-
-
-        <div class="grid-2">
-            <label>Class Name
-                <input type="text" name="className" required>
-            </label>
-            <label>Instructor ID
-                <input type="text" name="instructorId" required>
-            </label>
+<body class="layout--top-nav"> <header class="top-header">
+        <div class="logo-wrap">
+            <a href="customer.html">
+                <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
+            </a>
         </div>
+        <nav class="nav">
+            <a href="instructor.html" class="admin-only">Instructors</a>
+            <a href="packages.html" class="admin-only">Packages</a>
+            <a href="class.html" class="admin-only active">Class Schedule</a>
+            <a href="customer.html">Customers</a>
+            <a href="sales.html">Sales</a>
+            <a href="check-in.html">Check-ins</a>
+            <a href="manageUsers.html" class="admin-only">User Management</a>
+            <a href="../login.html" class="logout-link">Log Out</a>
+        </nav>
+    </header>
 
-        <div class="grid-2">
-            <label>Class Type
-                <input type="text" name="classType" required>
-            </label>
+    <main>
+        <div class="overlay">
+            <form class="card" id="classForm">
+                <h2>Class Details</h2>
+
+                <div class="form-group">
+                    <label id="classIdLabel" for="classIdSelect">Class ID</label>
+                    <select name="classId" id="classIdSelect" class="form-input styled-select">
+                        <option value="">-- Select Class ID --</option>
+                    </select>
+
+                    <label id="classIdTextLabel" style="display: none;">Class ID</label>
+                    <input id="classIdText" type="text" class="form-input" style="display: none;" readonly/>
+                </div>
+
+                <div class="grid-2">
+                    <label>Class Name
+                        <input type="text" name="className" id="className" required>
+                    </label>
+                    <label>Instructor ID
+                        <input type="text" name="instructorId" id="instructorId" required>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Class Type
+                        <input type="text" name="classType" id="classType" required>
+                    </label>
+                </div>
+
+                <label> Class Description
+                    <textarea name="description" id="description" rows="2"></textarea>
+                </label>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+                <div class="form-group">
+                    <label id="classTimes" for="classTimeSelect">Schedule Selection</label>
+                    <select name="weekDay" id="classTimeSelect" class="form-input styled-select">
+                        <option value="">-- Select WeekDay --</option>
+                    </select>
+                    
+                    <label id="timeIdTextLabel" style="display: none;">Time ID</label>
+                    <input id="timeIdText" type="text" class="form-input" style="display: none;" readonly/>
+                </div>
+
+                <div class="grid-2">
+                    <label>Day
+                        <input type="text" name="day" id="day" required>
+                    </label>
+                    <label>Time
+                        <input type="text" name="time" id="time" required>
+                    </label>
+                </div>
+
+                <div class="grid-2">
+                    <label>Duration (mins)
+                        <input type="number" name="duration" id="duration" required>
+                    </label>
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn--secondary" onclick="clearClassForm()">Clear</button>
+                    <button type="button" class="btn btn--danger admin-only" id="deleteBtn">Delete Class</button>
+                    <button type="submit" class="btn btn--primary" id="addBtn">Save Class</button>
+                </div>
+            </form>
         </div>
+    </main>
 
-        <label> Class Description
-            <textarea name="description" rows="2"></textarea>
-        </label>
-
-        <label id="classTimes">Day
-            <select name="weekDay" id="classTimeSelect" class="form-input">
-                <option value="">-- Select WeekDay --</option>
-                <!-- Options will be populated by JavaScript-->
-            </select>
-         </label>
-
-         <label>
-            <!-- Toggle with ClassIdLabel -->
-            <label id="timeIdTextLabel" style="display: none;">Time ID</label>
-            <input id="timeIdText" type="text" style="display: none;" readonly/>
-        </label>
-
-        <div class="grid-2">
-            <label>Day
-                <input type="text" name="day" required>
-            </label>
-            <label>Time
-                <input type="text" name="time" required>
-            </label>
-        </div>
-
-        <div class="grid-2">
-            <label>Duration
-                <input type="number" name="duration" required>
-            </label>
-        </div>
-
-        <!-- Adding buttons to form -->
-         <div class="btn-row">
-            <button type="submit" class="btn btn--primary" id="addBtn">Save Class</button>
-            <button type="button" class="btn btn--danger" id="deleteBtn">Delete Class</button>
-            <button type="button" class="btn" onclick="clearClassForm()">Clear</button>
-         </div>
-    </form>
-    </div>
-  </main>
-
-<script src="../js/class.js"></script>
+    <script src="../js/class.js"></script>
 </body>
 </html>

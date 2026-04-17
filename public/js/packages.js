@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    applyPermissions();
     refreshPackageTables();
     initPackageForm(); 
     initPackageDropdown();
@@ -6,13 +7,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //Checks user role for user management tab
-const role = localStorage.getItem("role");
-    const userManagementLink = document.getElementById("userManagementLink");
-
-    if (role === "admin" && userManagementLink) {
-      userManagementLink.style.display = "block";
+function applyPermissions() {
+    const role = localStorage.getItem("role");
+  
+    if (role !== "admin") {
+      // Find everything marked 'admin-only' and remove it from the DOM
+      const adminElements = document.querySelectorAll(".admin-only");
+      adminElements.forEach(el => el.remove());
     }
-
+  }
 //Deleting a class
 document.getElementById("deleteBtn").addEventListener("click", async () =>{
     const form = document.getElementById("addPackageForm");

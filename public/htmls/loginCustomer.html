@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YogiTrack New Customer</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="layout--top-nav"> <header class="top-header">
+    <div class="logo-wrap">
+      <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
+    </div>
+    <nav class="nav">
+      <a href="../login.html" class="logout-link">Back to Login</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="overlay">
+      <form class="card" id="customerForm">
+        <h2>Create Customer Profile</h2>
+        <p class="text--muted" style="margin-bottom: 1.5rem;">Please fill out the details below to register.</p>
+
+        <div style="display: none;">
+          <label id="customerIdLabel" for="customerIdSelect">Customer ID</label>
+          <select name="customerId" id="customerIdSelect" class="form-input">
+            <option value="">-- Select Customer ID --</option>
+          </select>
+          <label id="customerIdTextLabel">Customer ID</label>
+          <input id="customerIdText" name="customerIdText" type="text" readonly />
+        </div>
+
+        <div class="grid-2">
+          <label>First Name
+            <input type="text" name="firstName" class="form-input" required/>
+          </label>
+
+          <label>Last Name
+            <input type="text" name="lastName" class="form-input" required/>
+          </label>
+        </div>
+
+        <label>Address
+          <textarea name="address" class="form-input" rows="3" required></textarea>
+        </label>
+
+        <div class="grid-2">
+          <label>Phone
+            <input type="text" name="phone" class="form-input" required/>
+          </label>
+
+          <label>Email
+            <input type="email" name="email" class="form-input" required/>
+          </label>
+        </div>
+
+        <fieldset class="modern-fieldset">
+          <legend>Preferred Contact</legend>
+          <div class="radio-row">
+            <label class="radio-label"><input type="radio" name="pref" value="phone" /> Phone</label>
+            <label class="radio-label"><input type="radio" name="pref" value="email" checked/> Email</label>
+          </div>
+        </fieldset>
+
+        <input type="number" name="classBalance" value="0" style="display: none;" readonly />
+
+        <label class="radio-label" style="margin-bottom: 2rem;">
+          <input type="checkbox" name="terms" required>
+          <span>I accept the <a href="terms.html" target="_blank" class="link--text">Terms and Conditions</a></span>
+        </label>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn--secondary" onclick="clearCustomerForm()">Clear Form</button>
+          <button type="submit" id="addBtn" class="btn btn--primary">Create Profile</button>
+          <button type="button" id="deleteBtn" class="btn btn--danger admin-only" style="display:none;">Delete</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="/js/customer.js"></script>
+</body>
+</html>

@@ -3,87 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YogiTrack - Customer Details</title>
+  <title>YogiTrack Customer Details</title>
   <link rel="stylesheet" href="../css/style.css" />
 </head>
-<body class="layout--sidebar">
-  <!-- Re-use the same sidebar -->
-  <aside class="sidebar">
-    <a class="logo-wrap" href="dashboard.html">
-      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
-    </a>
-  <nav class="nav">
-    <a href="instructor.html">Instructors</a>
-    <a href="packages.html">Packages</a>
-    <a href="class.html">Class Schedule</a>
-    <a href="customer.html">Customers</a>
-    <a href="sales.html">Sales</a>
-    <a href="#">Check-ins</a>
-    <a href="manageUsers.html" id="userManagementLink" style="display: none;">User Management</a>
-    <a href="../login.html">Log Out</a>
-  </nav>
-  </aside>
+<body class="layout--top-nav"> <header class="top-header">
+    <div class="logo-wrap">
+      <a href="customer.html">
+        <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
+      </a>
+    </div>
+    <nav class="nav">
+      <a href="instructor.html" class="admin-only">Instructors</a>
+      <a href="packages.html" class="admin-only">Packages</a>
+      <a href="class.html" class="admin-only">Class Schedule</a>
+      <a href="customer.html" class="active">Customers</a> <a href="sales.html">Sales</a>
+      <a href="check-in.html">Check-ins</a>
+      <a href="manageUsers.html" class="admin-only">User Management</a>
+      <a href="../login.html" class="logout-link">Log Out</a>
+    </nav>
+  </header>
 
-    <main>
-      <div class="overlay" style="justify-content: center; align-items: center; width: 100%;">
-      <form class="card" id="customerForm">
-        <h2>Customer Details</h2>
+  <main>
+    <div class="overlay">
+      <form class="card" id="customerForm"> <h2>Customer Details</h2>
 
-          <!-- Search mode -->
-          <label id="customerIdLabel" for="customerId">Customer ID
-            <select name="customerId" id="customerIdSelect" class="form-input">
-              <option value="">-- Select Customer ID --</option>
-            </select>
-          </label>
+        <div class="form-group">
+          <label id="customerIdLabel" for="customerIdSelect">Customer ID</label>
+          <select name="customerId" id="customerIdSelect" class="form-input styled-select">
+            <option value="">-- Select Customer ID --</option>
+          </select>
 
-          <!-- Add mode -->
           <label id="customerIdTextLabel" style="display:none;">Customer ID</label>
-          <input id="customerIdText" name="customerIdText" type="text" style="display:none;" readonly />
-
-          <div class="grid-2">
-            <label>First Name
-              <input type="text" name="firstName"  required/>
-            </label>
-
-            <label>Last Name
-              <input type="text" name="lastName" required/>
-            </label>
-          </div>
-
-          <label>Address
-            <textarea name="address" rows="3" required></textarea>
-          </label>
-
-          <div class="grid-2">
-            <label>Phone
-              <input type="text" name="phone"  required/>
-            </label>
-
-            <label>Email
-              <input type="email" name="email"  required/>
-            </label>
-          </div>
-
-          <fieldset>
-            <legend>Preferred Contact</legend>
-            <div class="radio-group">
-              <label><input type="radio" name="pref" value="phone" /> Phone</label>
-              <label><input type="radio" name="pref" value="email"  checked/> Email</label>
-            </div>
-          </fieldset>
-
-          <label>Class Balance
-            <input type="number" name="classBalance" value="0" required />
-          </label>
-
-          <div class="btn-row">
-            <button type="submit" id="addBtn" class="btn btn--primary">Save Customer</button>
-            <button type="button" id="deleteBtn" class="btn btn--danger">Delete</button>
-            <button type="button" class="btn" onclick="clearCustomerForm()">Clear</button>
-          </div>
-        </form>
+          <input id="customerIdText" name="customerIdText" type="text" class="form-input" style="display:none;" readonly />
         </div>
-    </main>
+
+        <div class="grid-2"> <label>First Name
+            <input type="text" name="firstName" required/>
+          </label>
+
+          <label>Last Name
+            <input type="text" name="lastName" required/>
+          </label>
+        </div>
+
+        <label>Address
+          <textarea name="address" rows="3" required></textarea>
+        </label>
+
+        <div class="grid-2">
+          <label>Phone
+            <input type="text" name="phone" required/>
+          </label>
+
+          <label>Email
+            <input type="email" name="email" required/>
+          </label>
+        </div>
+
+        <fieldset class="modern-fieldset">
+          <legend>Preferred Contact</legend>
+          <div class="radio-row">
+            <label class="radio-label"><input type="radio" name="pref" value="phone" /> Phone</label>
+            <label class="radio-label"><input type="radio" name="pref" value="email" checked/> Email</label>
+          </div>
+        </fieldset>
+
+        <label>Class Balance
+          <input type="number" name="classBalance" value="0" required />
+        </label>
+
+        <label class="radio-label" style="margin-bottom: 1.5rem;">
+          <input type="checkbox" name="terms" required>
+          <span>I accept the <a href="terms.html" target="_blank" class="link--text">Terms and Conditions</a></span>
+        </label>
+
+        <div class="btn-row">
+          <button type="button" class="btn btn--secondary" onclick="clearCustomerForm()">Clear</button>
+          <button type="button" id="deleteBtn" class="btn btn--danger admin-only">Delete</button>
+          <button type="submit" id="addBtn" class="btn btn--primary">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </main>
 
   <script src="/js/customer.js"></script>
 </body>

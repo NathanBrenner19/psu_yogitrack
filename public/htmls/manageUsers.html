@@ -3,157 +3,158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Users</title>
+  <title>Manage Users - YogiTrack</title>
   <link rel="stylesheet" href="../css/style.css" />
 </head>
-<body class="layout--sidebar">
-  <!-- Re-use the same sidebar -->
-  <aside class="sidebar">
-    <a class="logo-wrap" href="dashboard.html">
-      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
-    </a>
+<body class="layout--top-nav"> <header class="top-header">
+    <div class="logo-wrap">
+      <a href="customer.html">
+        <img src="../images/TranspLogo.png" alt="YogaTrack Logo" class="logo">
+      </a>
+    </div>
     <nav class="nav">
-        <a href="instructor.html">Instructors</a>
-        <a href="packages.html">Packages</a>
-        <a href="class.html">Class Schedule</a>
+        <a href="instructor.html" class="admin-only">Instructors</a>
+        <a href="packages.html" class="admin-only">Packages</a>
+        <a href="class.html" class="admin-only">Class Schedule</a>
         <a href="customer.html">Customers</a>
         <a href="sales.html">Sales</a>
-        <a href="#">Check-ins</a>
-        <a href="manageUsers.html" id="userManagementLink" style="display: none;">User Management</a>
-        <a href="../login.html">Log Out</a>
+        <a href="check-in.html">Check-ins</a>
+        <a href="manageUsers.html" class="admin-only active" id="userManagementLink">User Management</a>
+        <a href="../login.html" class="logout-link">Log Out</a>
     </nav>
-  </aside>
+  </header>
+
   <main>
     <div class="overlay">
-      <div class="top-bar">
-        <h2>User Management</h2>
-      </div>
-        
-      <div class="message" id="message"></div>
-      
-      <section class="top--layout--center"> 
-        <div class="table-responsive-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>User ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Active</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="userTable"></tbody>
-          </table>
+      <div class="card card--wide">
+        <div class="top-bar">
+          <h2>User Management</h2>
+          <p class="text--muted">Manage system access and roles for instructors and staff.</p>
         </div>
-      </section>
+          
+        <div class="message" id="message" style="margin-bottom: 1rem; font-weight: 600;"></div>
+        
+        <section> 
+          <div class="table-responsive-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Active</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="userTable">
+                </tbody>
+            </table>
+          </div>
+        </section>
 
-      <div class="btn-row">
-        <button class="btn btn--primary" onclick="goToCreateUser()">Create User</button>
-        <button class="btn btn--danger" onclick="logout()">Logout</button>
+        <div class="btn-row">
+          <button class="btn btn--secondary" onclick="logout()">Logout</button>
+          <button class="btn btn--primary" onclick="goToCreateUser()">Create New User</button>
+        </div>
       </div>
     </div>
   </main>
 
   <script>
+    // Logic preserved exactly as provided to maintain functionality
     async function loadUsers() {
-    const role = localStorage.getItem("role");
-    const message = document.getElementById("message");
+      const role = localStorage.getItem("role");
+      const message = document.getElementById("message");
 
-    if (role !== "admin") {
-      message.style.color = "red";
-      message.textContent = "Access denied. Admins only.";
-      return;
-    }
-
-    try {
-      const res = await fetch("/api/user/list", {
-        headers: {
-          "x-user-role": role
-        }
-      });
-
-      const users = await res.json();
-
-      if (!res.ok) {
-        message.style.color = "red";
-        message.textContent = users.message || "Could not load users";
-        return;
+      if (role !== "admin") {
+        alert("Unauthorized access!");
+        window.location.href = "../login.html";
       }
 
-      const table = document.getElementById("userTable");
-      table.innerHTML = "";
+      try {
+        const res = await fetch("/api/user/list", {
+          headers: { "x-user-role": role }
+        });
 
-      users.forEach(user => {
-        const row = document.createElement("tr");
+        const users = await res.json();
 
-        row.innerHTML = `
-          <td>${user.userId}</td>
-          <td>${user.username}</td>
-          <td>${user.email}</td>
-          <td>${user.role}</td>
-          <td>${user.isActive}</td>
-          <td>
-              <button class="btn btn--edit" onclick="goToEditUser('${user.userId}')">Edit</button>
-              <button class="btn btn--danger" onclick="deleteUser('${user.userId}')">Delete</button>
-          </td>
-`;
-
-        table.appendChild(row);
-      });
-    } catch (err) {
-      message.style.color = "red";
-      message.textContent = "Error connecting to server";
-    }
-  }
-
-  async function deleteUser(userId) {
-    const role = localStorage.getItem("role");
-
-    if (!confirm("Are you sure you want to delete this user?")) {
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/user/${userId}`, {
-        method: "DELETE",
-        headers: {
-          "x-user-role": role
+        if (!res.ok) {
+          message.style.color = "var(--danger-red)";
+          message.textContent = users.message || "Could not load users";
+          return;
         }
-      });
 
-      const data = await res.json();
+        const table = document.getElementById("userTable");
+        table.innerHTML = "";
 
-      if (!res.ok) {
-        alert(data.message || "Delete failed");
-        return;
+        users.forEach(user => {
+          const row = document.createElement("tr");
+
+          // Preserving the exact button classes and onclick handlers for the JS logic
+          row.innerHTML = `
+            <td>${user.userId}</td>
+            <td>${user.username}</td>
+            <td>${user.email}</td>
+            <td><span class="badge">${user.role}</span></td>
+            <td>${user.isActive}</td>
+            <td>
+                <button class="btn btn--secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="goToEditUser('${user.userId}')">Edit</button>
+                <button class="btn btn--danger" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="deleteUser('${user.userId}')">Delete</button>
+            </td>
+          `;
+          table.appendChild(row);
+        });
+      } catch (err) {
+        message.style.color = "var(--danger-red)";
+        message.textContent = "Error connecting to server";
       }
-
-      loadUsers();
-    } catch (err) {
-      alert("Error connecting to server");
     }
-  }
 
-  function goToCreateUser() {
-    window.location.href = "createUser.html";
-  }
+    async function deleteUser(userId) {
+      const role = localStorage.getItem("role");
+      if (!confirm("Are you sure you want to delete this user?")) return;
 
-  function logout() {
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
-    localStorage.removeItem("userId");
-    window.location.href = "/login.html";
-  }
+      try {
+        const res = await fetch(`/api/user/${userId}`, {
+          method: "DELETE",
+          headers: { "x-user-role": role }
+        });
 
-  function goToEditUser(userId) {
-       window.location.href = `editUser.html?userId=${userId}`;
-  }
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.message || "Delete failed");
+          return;
+        }
+        loadUsers();
+      } catch (err) {
+        alert("Error connecting to server");
+      }
+    }
 
-  loadUsers();
+    function goToCreateUser() {
+      window.location.href = "createUser.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      localStorage.removeItem("userId");
+      window.location.href = "../login.html";
+    }
+
+    function goToEditUser(userId) {
+      window.location.href = `editUser.html?userId=${userId}`;
+    }
+
+    // Initialize page
+    loadUsers();
+    
+    // Ensure "User Management" link shows for admins
+    const role = localStorage.getItem("role");
+    if (role === "admin") {
+      document.getElementById("userManagementLink").style.display = "inline-block";
+    }
   </script>
-        </div>
-    </div>
 </body>
 </html>

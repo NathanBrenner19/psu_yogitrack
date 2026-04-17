@@ -8,6 +8,8 @@ router.get("/getCustomer", customerController.getCustomer);
 // ADD customer
 router.post("/add", customerController.add);
 
+router.put("/update", customerController.update);
+
 // GET all customer IDs
 router.get("/getCustomerIds", customerController.getCustomerIds);
 
